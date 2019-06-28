@@ -1,5 +1,7 @@
 /* Outputs below are SQL output
    Final output will be encoded to JSON
+   Database columns can be aliased to 
+   any JSON key name
 */
 
 /* Student logs into app, and is given a list of
@@ -27,3 +29,11 @@ select q.id "QuestionID",
 from questions q, questions2exams qe
 where q.id = qe.questionsid
 and qe.examsid = 1;
+
+/* A student submits their answers and receives 
+   their score. Need students.id and exams.id
+*/
+select score
+from students2exams
+where examsid = 1
+and studentsid = 4;
