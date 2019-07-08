@@ -133,5 +133,70 @@ class Students{
 
   return false; 
   }
+
+  // check if email exists
+  function checkemailexists(){
+    // search for email  query
+    $query = "SELECT id, email FROM students WHERE email = :email";
+
+    // prepare query statement
+    $stmt = $this->conn->prepare($query);
+
+    // Sanitize and bind
+    $this->email=htmlspecialchars(strip_tags($this->email));
+    $stmt->bindParam(":email", $this->email);
+
+    // execute query
+    $stmt->execute();
+
+    // Check results
+    $num = $stmt->rowCount();
+    if($num>0){
+      return true;
+    } 
+    
+    return false;
+  }
+
+  // log a student in
+  function login(){
+    // validate login email/password
+    $query = "SELECT id FROM students WHERE email = :email AND  password=:password";
+
+    // prepare query statement
+    $stmt = $this->conn->prepare($query);
+
+    // Sanitize and bind
+    $this->email=htmlspecialchars(strip_tags($this->email));
+    $this->password=htmlspecialchars(strip_tags($this->password));
+    $stmt->bindParam(":email", $this->email);
+    $stmt->bindParam(":password", $this->password);
+
+    // execute query
+    $stmt->execute();
+    
+    // Check results
+    $num = $stmt->rowCount();
+    
+    //file_put_contents("debug0.txt", $num, FILE_APPEND);
+    
+    if($num==0){
+      return $stmt; // Needs invalid username/password message
+    } 
+    
+    $result = $stmt->fetch();  // May need PDO::FETCH_ASSOC inside ()
+    $resultID = $result["id"];
+    //file_put_contents("debug1.txt", $result, FILE_APPEND);
+    $query2 = "SELECT e.id, e.name, e.opens, e.closes
+               FROM students2exams se, exams e
+               WHERE se.examsid =  e.id
+               AND se.studentsid = $resultID
+               AND e.opens < current_timestamp
+               AND e.closes > current_timestamp";
+    //file_put_contents("debug2.txt", $query2, FILE_APPEND);
+    $stmt2 = $this->conn->prepare($query2);           
+    $stmt2->execute();
+    return $stmt2;
+  }
   
 }
