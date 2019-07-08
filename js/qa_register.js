@@ -1,12 +1,7 @@
-var url = "https://fullernetwork.com/api/qa_register_getCode.php";
-
 function getCode() {
-  // Send email address to server to verify not already used
-  //   otherwise generates an error
-  // Server stores email address entered in a php session
-  // along with a random 6 digit verification code
-  // Server sends code to the email address entered
 
+  console.log(baseURL);
+  
   // If no error, turn on next section
   var emailString = document.getElementById("email").value;
   if ( !looksLikeEmail(emailString) ) {
@@ -35,7 +30,8 @@ function getCode() {
 	// catch(err){
 	// 	alert("Invalid Connection!!");
   // }
-  
+
+  document.getElementById("email").disabled = true;
   document.getElementById("enterChallenge").style.display = "block";
 }
 
