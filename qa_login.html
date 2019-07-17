@@ -17,30 +17,39 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="qa_index.html">Home</a>
-          </li>
           <li class="nav-item">
-            <a class="nav-link" href="qa_exam.html">Exams</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="qa_question.html">Questions</a>
+            <a class="nav-link" href="#">Home</a>
           </li>
         </ul>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#">Logout</a>
+            <a class="nav-link" href="qa_register.html">Register</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="qa_login.html">Login <span class="sr-only">(current)</span></a>
           </li>
         </ul>
       </div>
     </nav>
 
-    <title>Welcome to the index page!</title>
   </head>
-
-  <!-- Page content goes here -->
   <body>
-    <h1>Index</h1>
+    <script src="js/qa_login.js"></script>
+
+    <!-- Page content goes here -->
+    <title>QuizApp Login</title>
+
+    <form class="mx-3" style="max-width: 300px;">
+      <div class="form-group">
+        <label for="InputEmail">Email address</label>
+        <input type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp" placeholder="name@example.com">
+      </div>
+      <div class="form-group">
+        <label for="InputPassword">Password</label>
+        <input type="password" class="form-control" id="InputPassword" placeholder="Password">
+      </div>
+      <button type="submit" class="btn btn-primary" onclick="qaLogin()">Submit</button>
+    </form>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
