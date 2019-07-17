@@ -15,6 +15,60 @@
   <body>
     <div id="navBar"></div>
     <h1>Students</h1>
+    <table  class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">First</th>
+          <th scope="col">Last</th>
+          <th scope="col">Email</th>
+        </tr>
+      </thead>
+      <tbody id="myTable">
+        <tr onclick="alert('row 1 clicked')">
+          <th scope="row">1</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td colspan="2">Larry the Bird</td>
+          <td>@twitter</td>
+        </tr>
+      </tbody>
+      <tbody>
+        <tr>
+          <form>
+            <th scope="row">
+              <button type="button" class="btn btn-primary" onclick="alert('Submitted')">Insert</button>
+            </th>
+            <td>
+              <div class="form-group">
+                <input type="text" class="form-control" id="InputFName" placeholder="First">
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <input type="text" class="form-control" id="InputLName"  placeholder="Last">
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <input type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp" placeholder="Email">
+              </div>
+            </td>
+          </form>
+        </tr>
+
+      </tbody>
+    </table>
 
 
     <!-- Bootstrap -->
