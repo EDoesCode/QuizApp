@@ -9,7 +9,7 @@ $("#navBar").html(
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item" id="students">
-            <a class="nav-link" href="qa_index.html">Students</a>
+            <a class="nav-link" href="qa_student.html">Students</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="qa_exam.html">Exams</a>
@@ -27,4 +27,3 @@ $("#navBar").html(
     </nav>
     `
 );
-
