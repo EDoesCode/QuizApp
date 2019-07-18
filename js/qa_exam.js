@@ -1,10 +1,8 @@
 /* Loads the exam table into tableDiv
+exams: object[]: Array of Exam objects
 */
-function loadExamTable()
+function loadExamTable(exams)
 {
-    // --TEST SECTION--
-    let exams = unitTests.exams;
-    // --END TEST SECTION--
     cleanDateTime = function(dateTime)
     {
         dateTime = dateTime.replace("T", " ");
@@ -39,4 +37,4 @@ function deleteExam(id)
     window.alert("delete" + id);
 }
 
-loadExamTable();
+loadExamTable(unitTests.exams);
