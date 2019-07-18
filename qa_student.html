@@ -15,34 +15,14 @@
   <body>
     <div id="navBar"></div>
     <h1>Students</h1>
-    <table  class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">First</th>
-          <th scope="col">Last</th>
-          <th scope="col">Email</th>
-        </tr>
-      </thead>
-      <tbody id="myTable">
-        <tr onclick="alert('row 1 clicked')">
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td colspan="2">Larry the Bird</td>
-          <td>@twitter</td>
-        </tr>
-      </tbody>
+    <table id="crTable" class="table m-2">
+      <tr>
+        <td><input type="text" id="search"/> <input type="button" onclick="searchStudents()" value="Search" /></td>
+        <td class="float-right pr-5"><input type="button" onclick="openAddStudent()" value="+" /></td>
+      </tr>
+    </table>
+    <div id="tableDiv"></div>
+<!--
       <tbody>
         <tr>
           <form>
@@ -69,7 +49,7 @@
 
       </tbody>
     </table>
-
+  -->
 
     <!-- Bootstrap -->
     <script src="js/jquery-3.4.1.js"></script>
@@ -82,4 +62,5 @@
   <script src="js/baseURL.js"></script>
   <script src="js/qa_common.js"></script>
   <script src="js/qa_navbar.js"></script>
+  <script src="js/qa_student.js"></script>
 </html>
