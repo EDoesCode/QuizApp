@@ -13,12 +13,13 @@ function loadExamTable()
     }
     for (var i = 0; i < exams.length; i++)
     {
-        exams[i].opens = cleanDateTime(exams[i].opens);
-        exams[i].closes = cleanDateTime(exams[i].closes);
+        exams[i].opensClean = cleanDateTime(exams[i].opens);
+        exams[i].closesClean = cleanDateTime(exams[i].closes);
     }
     let headers = ["Name", "Opening Time", "Closing Time"];
-    let keys = ["name", "opens", "closes"];
-    let table = makeTable(headers, keys, exams, modifyExam, deleteExam);
+    let keys = ["name", "opensClean", "closesClean"];
+    let table = makeTable(TABLE_CRUD, headers, keys, exams, modifyExam, deleteExam);
+    table.attr("id", "examTable");
     $(tableDiv).append(table);
 }
 
