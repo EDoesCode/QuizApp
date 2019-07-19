@@ -1,32 +1,50 @@
+
+$(addDiv).hide();
+data = null;
+
+directory = "students";
 /* Loads the student table into tableDiv
 students: object[]: Array of Student objects
 */
 function loadStudentTable(students)
 {
+    data = students;
     // Replacing "true" and "false" strings with "yes" and "no"
     for (var i = 0; i < students.length; i++)
         students[i].isAdminClean = (students[i].isAdmin == "true" ? "Yes" : "No")
     let headers = ["First Name", "Last Name", "Email", "Admin?"];
     let keys = ["firstname", "lastname", "email", "isAdminClean"];
-    let table = makeTable(TABLE_CRUD, headers, keys, students, modifyStudent, deleteStudent);
+    let table = makeTable(TABLE_CRUD, headers, keys, students);
     table.attr("id", "studentTable");
     $(tableDiv).append(table);
 }
 
-/* Loads the div for modifying the given student by id
-id: int: Database ID for the given student
+/* Populates the fields of the data entry form when modifying an existing entry.  Each page needs this function
+curData: Student: data object to populate the fields with
 */
-function modifyStudent(id)
+function populateFields(curData)
 {
-    window.alert("modify" + id);
+    if (curData === null)
+        return;
+    $(email).val(curData.email);
+    $(first).val(curData.firstname);
+    $(last).val(curData.lastname);
+    $(password).val(curData.password);
 }
 
-/* Deletes the selected student from the database
-id: int: Database ID for the given student
+/* Creates a Student object from the fields on this page
+id: int: ID number of object.  If left blank, Student will have no ID field
 */
-function deleteStudent(id)
+function getDataObject(id = null)
 {
-    window.alert("delete" + id);
+    var dataObj = {};
+    if (id !== null)
+        dataObj.id = id;
+    dataObj.email = $(email).val();
+    dataObj.firstname = $(first).val();
+    dataObj.lastname = $(last).val();
+    dataObj.password = $(password).val();
+    return dataObj;
 }
 
 loadStudentTable(unitTests.students);

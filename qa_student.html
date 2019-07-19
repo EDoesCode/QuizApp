@@ -18,10 +18,47 @@
     <table id="crTable" class="table m-2">
       <tr>
         <td><input type="text" id="search"/> <input type="button" onclick="searchStudents()" value="Search" /></td>
-        <td class="float-right pr-5"><input type="button" onclick="openAddStudent()" value="+" /></td>
+        <td class="float-right pr-5"><input type="button" class="display-4" onclick="openCreateModify()" value="+" /></td>
       </tr>
     </table>
     <div id="tableDiv"></div>
+    <div id="addDiv" style="display: none">
+        <h1>Student Registration</h1>
+        <div id="registerDetails">
+            <table>
+                <tr>
+                    <td align=" right">Email:</td>
+                    <td align="left"><input type="text" id="email" size="50" maxlength="50" /></td>
+                </tr>
+    
+                <tr>
+                    <td align="right">First Name:</td>
+                    <td align="left"><input type="text" id="first" size="50" maxlength="50" /></td>
+                </tr>
+    
+                <tr>
+                    <td align="right">Last Name:</td>
+                    <td align="left"><input type="text" id="last" size="50" maxlength="50"></td>
+                </tr>
+    
+                <tr>
+                    <td align="right">Password:</td>
+                    <td align="left"><input type="password" id="password" size="50" maxlength="200"></td>
+                </tr>
+    
+                <tr>
+                    <td align="right">Confirm Password:</td>
+                    <td align="left"><input type="password" id="confirmPassword" size="50" maxlength="200"></td>
+                </tr>
+    
+                <tr>
+                    <td align="right"></td>
+                    <td align="left"><input type="button" id="submitButton" /></td>
+                </tr>
+            </table>
+        </div>
+      </form>
+    </div>
 <!--
       <tbody>
         <tr>

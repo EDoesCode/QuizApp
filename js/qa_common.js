@@ -65,13 +65,12 @@ deleteFunc: function(id: int): A delete function to be ran upon clicking a delet
 */
 const TABLE_CRUD = 0;   // Tables with MODIFY and DELETE buttons
 const TABLE_CHECK = 1;  // Tables with checkboxes (with ID labels) in the final column.  The initial value of the checkbox is set to 
-function makeTable(type, headers, keys, objects, modifyFunc = null, deleteFunc = null)
+function makeTable(type, headers, keys, objects)
 {
     if (headers.length != keys.length)
     {
         console.log("Error on function makeTable: headers/keys length mismatch.");
     }
-    buttonFuncs = [modifyFunc, deleteFunc];
     var table = $(document.createElement('table'));
     var tableHead = $(document.createElement('thead'));
     var headerRow = $(document.createElement('tr'));
@@ -90,7 +89,7 @@ function makeTable(type, headers, keys, objects, modifyFunc = null, deleteFunc =
     tableBody.attr("id", "myTable");
     for (var row = 0; row < objects.length; row++)
     {
-        let curRow = makeRow(type, keys,objects[row], modifyFunc, deleteFunc);
+        let curRow = makeRow(type, keys,objects[row]);
         tableBody.append(curRow);
     }
     table.append(tableBody);
@@ -107,52 +106,151 @@ curObj: object:     Object containing data to populate the row with.
 modifyFunc: function(id: int): A modify function to be ran upon clicking a modify button.  Leave null to have no button.
 deleteFunc: function(id: int): A delete function to be ran upon clicking a delete button.  Leave null to have no button.
 */
-function makeRow(type, keys, curObj, modifyFunc = null, deleteFunc = null)
+function makeRow(type, keys, curObj)
 {
     let row = $(document.createElement('tr'));
     for (var col = 0; col < keys.length; col++)
     {
         let td = $(document.createElement('td'));
-        let data = curObj[keys[col]];
+        let cellVal = curObj[keys[col]];
         // Final column is a checkbox in checkbox tables
         if (type == TABLE_CHECK && col == keys.length - 1)
         {
             checkBox = $(document.createElement('input'));
             checkBox.attr("type", "checkbox");
             let checked = true;
-            if (data == "false" || !data)
+            if (cellVal == "false" || !cellVal)
                 checked = false;
             checkBox.attr("checked", checked);
             checkBox.attr("id", curObj.id);
             td.append(checkBox);
         }
         else
-            td.text(data);
+            td.text(cellVal);
         row.append(td);
     }
     //Adding row buttons
     for (i = 0; i < 2; i++)
     {
         let td = $(document.createElement('td'));
-        let curFunc = buttonFuncs[i];
-        if (curFunc === null)
-            continue;
         let button = $(document.createElement('button'));
-        var clickEvent = function() { curFunc(curObj.id) };
-        button.click(clickEvent);
-        if (type == TABLE_CRUD)
+        if (i == 0)
         {
-            if (i == 0)
-                button.html("Modify");
-            else
-                button.html("Delete");
-            td.append(button);
-            row.append(td);
+            button.html("Modify");
+            button.attr("onclick", "openModify(" + curObj.id + ")");
         }
+        else
+        {
+            button.html("Delete");
+            button.attr("onclick", "deleteData("+ curObj.id+ ")");
+        }
+        td.append(button);
+        row.append(td);
     }
     return row;
 }
 
+// Each page.js file implements populateFields() separately
+/* Opens the student adding div and closes the table div
+id: int: ID number of data to modify.  If not modifying existing data, leave as -1
+*/
+function openCreateModify(id = -1)
+{
+    $(tableDiv).hide();
+    if (id !== -1)
+    {
+        try {
+            populateFields( getDataById(data, id) );
+        }
+        catch(err)
+        {
+            console.log("Cannot populate data fields without a populateFields(id) function.");
+        }
+        $(submitButton).attr("onclick", "updateData(" + id + ")");
+        $(submitButton).attr("value", "Update Student");
+    }
+    else
+    {
+        $(submitButton).attr("onclick", "submitData()");
+        $(submitButton).attr("value", "New Student");
+    }
+    $(addDiv).show();
+}
+
+/* Loads the div for modifying the given student by id
+id: int: Database ID for the given student
+*/
+function openModify(id)
+{
+    openCreateModify(id);
+}
+
+/* Returns the data object with the given ID
+dataArray: object[]: Array of objects with an id property
+id: int: ID number
+*/
+function getDataById(dataArray, id)
+{
+    for (var i = 0; i < dataArray.length; i++)
+    {
+        if (dataArray[i].id == id)
+            return dataArray[i];
+    }
+    return null;
+}
+
+
+// Each page must have directory: string: directory where the corresponding PHP files are stored
+directory = null;
+// Each page implements getDataObject(id = null) separately
+getDataObject = null;
+
+/* Deletes the data object with the given id from the database and reloads the page
+id: int: ID number of data object
+*/
+function deleteData(id)
+{
+    if (directory === null)
+    {
+        console.log("Error: directory not defined in this page's JS file.");
+        return;
+    }
+    else if (getDataObject === null)
+    {
+        console.log("Error: getDataObject() function not defined in this page's JS file.")
+        return;
+    }
+    fullDir = directory + "/create";
+    payload = JSON.stringify(data[id]);
+    apiRequest("POST", fullDir, payload)
+    location.reload();
+}
+
+/* Submits the data object to the database and reloads the page */
+function submitData()
+{
+    if (directory === null)
+    {
+        console.log("Error: directory not defined in this page's JS file.");
+        return;
+    }
+    else if (getDataObject === null)
+    {
+        console.log("Error: getDataObject() function not defined in this page's JS file.")
+        return;
+    }
+    fullDir = directory + "/delete";
+    dataObject = getDataObject();
+    payload = JSON.stringify(dataObject);
+    apiRequest("POST", fullDir, payload)
+    location.reload();
+}
+
+/* Submits an updated data object to the database and reloads the page */
+function updateData()
+{
+
+}
 // Testing object that contains testing functions and sample data
 unitTests = {
     exams: [
