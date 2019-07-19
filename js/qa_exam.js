@@ -2,7 +2,8 @@
 exams: object[]: Array of Exam objects
 */
 directory = "exams";
-function loadExamTable(exams)
+
+function loadTable(exams)
 {
     cleanDateTime = function(dateTime)
     {
@@ -22,4 +23,5 @@ function loadExamTable(exams)
     $(tableDiv).append(table);
 }
 
+readData();
 loadExamTable(unitTests.exams);

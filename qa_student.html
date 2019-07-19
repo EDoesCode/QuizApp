@@ -15,12 +15,7 @@
   <body>
     <div id="navBar"></div>
     <h1>Students</h1>
-    <table id="crTable" class="table m-2">
-      <tr>
-        <td><input type="text" id="search"/> <input type="button" onclick="searchStudents()" value="Search" /></td>
-        <td class="float-right pr-5"><input type="button" class="display-4" onclick="openCreateModify()" value="+" /></td>
-      </tr>
-    </table>
+    <div id="searchAddBar"></div>
     <div id="tableDiv"></div>
     <div id="addDiv" style="display: none">
         <h1>Student Registration</h1>
@@ -50,6 +45,10 @@
                     <td align="right">Confirm Password:</td>
                     <td align="left"><input type="password" id="confirmPassword" size="50" maxlength="200"></td>
                 </tr>
+                <tr>
+                  <td align="right">Is Administrator?</td>
+                  <td align="left"><input type="checkbox" id="isAdmin" size="50" maxlength="200"></td>
+                </tr>
     
                 <tr>
                     <td align="right"></td>
@@ -59,34 +58,6 @@
         </div>
       </form>
     </div>
-<!--
-      <tbody>
-        <tr>
-          <form>
-            <th scope="row">
-              <button type="button" class="btn btn-primary" onclick="alert('Submitted')">Insert</button>
-            </th>
-            <td>
-              <div class="form-group">
-                <input type="text" class="form-control" id="InputFName" placeholder="First">
-              </div>
-            </td>
-            <td>
-              <div class="form-group">
-                <input type="text" class="form-control" id="InputLName"  placeholder="Last">
-              </div>
-            </td>
-            <td>
-              <div class="form-group">
-                <input type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp" placeholder="Email">
-              </div>
-            </td>
-          </form>
-        </tr>
-
-      </tbody>
-    </table>
-  -->
 
     <!-- Bootstrap -->
     <script src="js/jquery-3.4.1.js"></script>

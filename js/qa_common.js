@@ -6,7 +6,7 @@ reaction: function(object): Function to run after receiving a response from the 
 showAlert: If true, shows an alert containing the message received from the server (will not show an alert without a message)
 */
 
-function apiRequest(type, name, payload, reaction = null, showAlert = true)
+function apiRequest(type, name, payload = null, reaction = null, showAlert = true)
 {
     var apiExtension = ".php";
     // baseURL is defined in baseURL.js
@@ -48,7 +48,10 @@ function apiRequest(type, name, payload, reaction = null, showAlert = true)
 	// Sending JSON
 	try
 	{
-		xhr.send(JSON.stringify(payload));
+        if (payload === null)
+            xhr.send();
+        else
+		    xhr.send(JSON.stringify(payload));
 	}
 	catch(err)
 	{
@@ -103,8 +106,6 @@ type: string: Type of table to make.  Can be TABLE_CRUD, TABLE_CHECK, or TABLE_Q
 headers: string[]:  Headers on the top row of the table
 keys: string[]:     Variables within the object to place in each column.  Should loosely match headers
 curObj: object:     Object containing data to populate the row with.
-modifyFunc: function(id: int): A modify function to be ran upon clicking a modify button.  Leave null to have no button.
-deleteFunc: function(id: int): A delete function to be ran upon clicking a delete button.  Leave null to have no button.
 */
 function makeRow(type, keys, curObj)
 {
@@ -130,22 +131,25 @@ function makeRow(type, keys, curObj)
         row.append(td);
     }
     //Adding row buttons
-    for (i = 0; i < 2; i++)
+    if (type == TABLE_CRUD)
     {
-        let td = $(document.createElement('td'));
-        let button = $(document.createElement('button'));
-        if (i == 0)
+        for (i = 0; i < 2; i++)
         {
-            button.html("Modify");
-            button.attr("onclick", "openModify(" + curObj.id + ")");
+            let td = $(document.createElement('td'));
+            let button = $(document.createElement('button'));
+            if (i == 0)
+            {
+                button.html("Modify");
+                button.attr("onclick", "openModify(" + curObj.id + ")");
+            }
+            else
+            {
+                button.html("Delete");
+                button.attr("onclick", "deleteData("+ curObj.id+ ")");
+            }
+            td.append(button);
+            row.append(td);
         }
-        else
-        {
-            button.html("Delete");
-            button.attr("onclick", "deleteData("+ curObj.id+ ")");
-        }
-        td.append(button);
-        row.append(td);
     }
     return row;
 }
@@ -202,8 +206,43 @@ function getDataById(dataArray, id)
 
 // Each page must have directory: string: directory where the corresponding PHP files are stored
 directory = null;
-// Each page implements getDataObject(id = null) separately
+
+// Each page implements getDataObject(id: int = null) separately
+// getDataObject must throw an error if the fields are invalid.
 getDataObject = null;
+
+/* Calls an API to read the data from the page's associated directory
+dir: string: directory to read data from.  Calls default if null
+*/
+function readData(dir = null)
+{
+    if (dir === null)
+        dir = directory;
+    if (dir === null)
+    {
+        console.log("Error: directory not defined in this page's JS file.");
+        return;
+    }
+    if (loadTable === null)
+    {
+        console.log("Error: loadTable(data) not defined in this page's JS file.");
+        return;
+    }
+    let fullDir = directory + "/read";
+    apiRequest("GET", fullDir, null, loadData);
+}
+
+// Each page implements loadTable(dataArray) separately
+loadTable = null;
+
+/* Reads received data array from a read call, sets the page's data to it, and loads the table
+newData: object[]: Object array of data entries*/
+function loadData(newData)
+{
+    data = newData;
+    var cloneData = newData.slice(0);
+    loadTable(cloneData);
+}
 
 /* Deletes the data object with the given id from the database and reloads the page
 id: int: ID number of data object
@@ -220,14 +259,16 @@ function deleteData(id)
         console.log("Error: getDataObject() function not defined in this page's JS file.")
         return;
     }
-    fullDir = directory + "/create";
-    payload = JSON.stringify(data[id]);
-    apiRequest("POST", fullDir, payload)
+    let fullDir = directory + "/create";
+    let payload = JSON.stringify(data[id]);
+    apiRequest("DELETE", fullDir, payload)
     location.reload();
 }
 
-/* Submits the data object to the database and reloads the page */
-function submitData()
+/* Submits the data object to the database and reloads the page
+id: int: ID of object to update.  If creating, leave empty
+*/
+function submitData(id = -1)
 {
     if (directory === null)
     {
@@ -239,18 +280,58 @@ function submitData()
         console.log("Error: getDataObject() function not defined in this page's JS file.")
         return;
     }
-    fullDir = directory + "/delete";
-    dataObject = getDataObject();
-    payload = JSON.stringify(dataObject);
-    apiRequest("POST", fullDir, payload)
+    let fullDir = directory + "/delete";
+    var dataObject;
+    try
+    {
+        dataObject = getDataObject();
+    }
+    catch(err)
+    {
+        alert(err);
+        return;
+    }
+    // Determining request type (POST for Create, PUT for Update)
+    let requestType = "POST";
+    if (id != -1)
+    {
+        dataObject.id = id;
+        requestType = "PUT";
+    }
+    let payload = JSON.stringify(dataObject);
+    apiRequest(requestType, fullDir, payload)
     location.reload();
 }
 
-/* Submits an updated data object to the database and reloads the page */
-function updateData()
+/* Submits an updated data object to the database and reloads the page
+id: int: ID of object to update.
+*/
+function updateData(id)
+{
+    submitData(id);
+}
+
+/* Searches the data for the given string in the search bar, then displays it */
+function searchData(substring)
 {
 
 }
+
+/* Builds a Search/Add bar to display above a table */
+function buildSearchAddBar()
+{
+    $(searchAddBar).html(
+    `
+    <table id="crTable" class="table m-2">
+    <tr>
+      <td><input type="text" id="search"/> <input type="button" onclick="searchData()" value="Search" /></td>
+      <td class="float-right pr-5"><input type="button" class="display-4" onclick="openCreateModify()" value="+" /></td>
+    </tr>
+  </table>
+  `
+    )
+}
+
 // Testing object that contains testing functions and sample data
 unitTests = {
     exams: [
@@ -268,9 +349,9 @@ unitTests = {
         {id: 7, firstname: "Jesse", lastname: "Delgado", email: "jesse98@example.com", password: "jessjess", isAdmin: "false", challenge: "", verified: ""}
     ],
     questions: [
-        {id: 5, question: "How many licks does it take to get to the tootsie-roll center of a Tootsie Pop?", a: "1", b: "2", c: "3", d: "CRUNCH", e: "", answer: "d", numberchoices: "4"},
-        {id: 2, question: "Does life on Mars exist?", a: "Yes", b: "No", c: "Maybe so", d: "", e: "", answer: "b", numberchoices: "3"},
-        {id: 19, question: "What is the name of the University of Central Florida?", a: "University of Central Florida", b: "Cancun", c: "", d: "", e: "", answer: "a", numberchoices: "2"},
-        {id: 53, question: "What have I got in my pocket?", a: "A bit of lint", b: "Some string", c: "A ring", d: "A New York Welcome", e: "A golden ticket", answer: "c", numberchoices: "4"}
+        {id: 5, question: "How many licks does it take to get to the tootsie-roll center of a Tootsie Pop?", a: "1", b: "2", c: "3", d: "CRUNCH", e: "", answer: "CRUNCH", numberchoices: "4"},
+        {id: 2, question: "Does life on Mars exist?", a: "Yes", b: "No", c: "Maybe so", d: "", e: "", answer: "No", numberchoices: "3"},
+        {id: 19, question: "What is the name of the University of Central Florida?", a: "University of Central Florida", b: "Cancun", c: "", d: "", e: "", answer: "University of Central Florida", numberchoices: "2"},
+        {id: 53, question: "What have I got in my pocket?", a: "A bit of lint", b: "Some string", c: "A ring", d: "A New York Welcome", e: "A golden ticket", answer: "A ring", numberchoices: "4"}
     ]
 }

@@ -1,10 +1,10 @@
 /* Loads the exam table into tableDiv
 questions: object[]: array of Question objects;
 */
-function loadQuestionTable(questions)
+function loadTable(questions)
 {
-    let headers = ["Question", "A", "B", "C", "D", "E", "Answer"];
-    let keys = ["question", "a", "b", "c", "d", "e", "answer"];
+    let headers = ["Question", "Answer"];
+    let keys = ["question", "answer"];
     let table = makeTable(TABLE_CRUD, headers, keys, questions, modifyQuestion, deleteQuestion);
     table.attr("id", "questionTable");
     $(tableDiv).append(table);

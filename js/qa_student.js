@@ -6,9 +6,8 @@ directory = "students";
 /* Loads the student table into tableDiv
 students: object[]: Array of Student objects
 */
-function loadStudentTable(students)
+function loadTable(students)
 {
-    data = students;
     // Replacing "true" and "false" strings with "yes" and "no"
     for (var i = 0; i < students.length; i++)
         students[i].isAdminClean = (students[i].isAdmin == "true" ? "Yes" : "No")
@@ -16,6 +15,7 @@ function loadStudentTable(students)
     let keys = ["firstname", "lastname", "email", "isAdminClean"];
     let table = makeTable(TABLE_CRUD, headers, keys, students);
     table.attr("id", "studentTable");
+    buildSearchAddBar();
     $(tableDiv).append(table);
 }
 
@@ -30,6 +30,8 @@ function populateFields(curData)
     $(first).val(curData.firstname);
     $(last).val(curData.lastname);
     $(password).val(curData.password);
+    $(confirmPassword).val(curData.password);
+    $(isAdmin).attr("checked", curData.isAdmin);
 }
 
 /* Creates a Student object from the fields on this page
@@ -44,6 +46,14 @@ function getDataObject(id = null)
     dataObj.firstname = $(first).val();
     dataObj.lastname = $(last).val();
     dataObj.password = $(password).val();
+    dataObj.isAdmin = $(isAdmin).attr("checked");
+    // Erroneous inputs
+    if (dataObj.email == "")
+        throw ("Student must have an email address");
+    if (dataObj.password == "")
+        throw ("Student must have a password.");
+    if ($(password).val() != $(confirmPassword).val())
+        throw ("Password and Confirm Password do not match.");
     return dataObj;
 }
 
