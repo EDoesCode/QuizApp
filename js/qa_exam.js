@@ -1,3 +1,11 @@
+
+$(document).ready(function() {
+    $(addDiv).hide();
+    data = null;
+    directory = "exams";
+    loadData(unitTests[directory]);
+})
+
 /* Loads the exam table into tableDiv
 exams: object[]: Array of Exam objects
 */
@@ -21,7 +29,5 @@ function loadTable(exams)
     let table = makeTable(TABLE_CRUD, headers, keys, exams);
     table.attr("id", "examTable");
     $(tableDiv).append(table);
+    buildSearchAddBar();
 }
-
-readData();
-loadExamTable(unitTests.exams);

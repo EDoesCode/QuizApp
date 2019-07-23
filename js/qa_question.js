@@ -1,3 +1,10 @@
+$(document).ready(function() {
+    $(addDiv).hide();
+    data = null;
+    directory = "questions";
+    loadData(unitTests[directory]);
+})
+
 /* Loads the exam table into tableDiv
 questions: object[]: array of Question objects;
 */
@@ -8,6 +15,7 @@ function loadTable(questions)
     let table = makeTable(TABLE_CRUD, headers, keys, questions, modifyQuestion, deleteQuestion);
     table.attr("id", "questionTable");
     $(tableDiv).append(table);
+    buildSearchAddBar();
 }
 
 /* Loads the div for modifying the given question by id
@@ -25,5 +33,3 @@ function deleteQuestion(id)
 {
     window.alert("delete" + id);
 }
-
-loadQuestionTable(unitTests.questions);

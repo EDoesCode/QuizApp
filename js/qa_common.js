@@ -241,6 +241,8 @@ function loadData(newData)
 {
     data = newData;
     var cloneData = newData.slice(0);
+    // Clearing existing table, if one exists
+    $(tableDiv).empty();
     loadTable(cloneData);
 }
 
@@ -311,25 +313,73 @@ function updateData(id)
     submitData(id);
 }
 
-/* Searches the data for the given string in the search bar, then displays it */
-function searchData(substring)
+/* Searches all data points for a given substring in their properties, then returns a list of results
+substring: string: String that must be present in at least one field in all the data.
+*/
+function filterTable()
 {
-
+    // Pull parameters directly from searchText input
+    var search = $(searchText).val();
+    // Removing case-sensitivity by converting to lowercase
+    var lowerCaseSearch = search.toLowerCase();
+    var validData = [];
+    var props = Object.keys(data[0]);
+    var propTypes = [];
+    // Getting property datatypes
+    for (var i = 0; i < props.length; i++)
+        propTypes[i] = typeof(data[0][props[i]]);
+    for (var i = 0; i < data.length; i++)
+    {
+        // Iterating through data
+        var curData = data[i];
+        for (var j = 0; j < props.length; j++)
+        {
+            // Iterating through each property on the data
+            var curProp = curData[props[j]];
+            var valid = false;
+            // Strings can contain the search term as a substring
+            if (propTypes[j] == "string")
+            {
+                // Case-insensitive searching
+                var lowerCaseProp = curProp.toLowerCase();
+                if (lowerCaseProp.includes(lowerCaseSearch))
+                    valid = true;
+            }
+            if (curProp == search)
+                valid = true;
+            if (valid)
+            {
+                validData.push(curData);
+                break;
+            }
+        }
+    }
+    // Clearing existing table, if one exists
+    $(tableDiv).empty();
+    loadTable(validData);
 }
 
 /* Builds a Search/Add bar to display above a table */
 function buildSearchAddBar()
 {
+    // Injecting raw HTML to make the bar with Bootstrap
     $(searchAddBar).html(
     `
     <table id="crTable" class="table m-2">
     <tr>
-      <td><input type="text" id="search"/> <input type="button" onclick="searchData()" value="Search" /></td>
+      <td><input type="text" id="searchText"/> <input type="button" id="searchButton" onclick="filterTable()" value="Search" /></td>
       <td class="float-right pr-5"><input type="button" class="display-4" onclick="openCreateModify()" value="+" /></td>
     </tr>
   </table>
   `
     )
+    // Making it so that an Enter press performs a search
+    $(searchText).keyup(function(event) {
+        if (event.keyCode == 13)
+        {
+            $(searchButton).click();
+        }
+    })
 }
 
 // Testing object that contains testing functions and sample data
@@ -342,11 +392,11 @@ unitTests = {
         {id: 23,    name: "Another Test",      opens: "2019-07-18T18:21:30.798Z",  closes: "2019-07-18T18:22:30.798Z"},
     ],
     students: [
-        {id: 0, firstname: "Professor", lastname: "McProfessorson", email: "professor@someuniversity.lol", password: "admin", isAdmin: "true", challenge: "", verified: ""},
-        {id: 1, firstname: "Berniece", lastname: "Centers", email: "berniececenters@example.com", password: "password", isAdmin: "false", challenge: "", verified: ""},
-        {id: 3, firstname: "Kyle", lastname: "Sims", email: "kyle_sims@example.com", password: "pass123", isAdmin: "false", challenge: "", verified: ""},
-        {id: 5, firstname: "Paul", lastname: "Marshall", email: "paul-86@example.com", password: "marshall", isAdmin: "true", challenge: "", verified: ""},
-        {id: 7, firstname: "Jesse", lastname: "Delgado", email: "jesse98@example.com", password: "jessjess", isAdmin: "false", challenge: "", verified: ""}
+        {id: 0, firstname: "Professor", lastname: "McProfessorson", email: "professor@someuniversity.lol", password: "admin", isAdmin: 1, challenge: "", verified: ""},
+        {id: 1, firstname: "Berniece", lastname: "Centers", email: "berniececenters@example.com", password: "password", isAdmin: 0, challenge: "", verified: ""},
+        {id: 3, firstname: "Kyle", lastname: "Sims", email: "kyle_sims@example.com", password: "pass123", isAdmin: 0, challenge: "", verified: ""},
+        {id: 5, firstname: "Paul", lastname: "Marshall", email: "paul-86@example.com", password: "marshall", isAdmin: 1, challenge: "", verified: ""},
+        {id: 7, firstname: "Jesse", lastname: "Delgado", email: "jesse98@example.com", password: "jessjess", isAdmin: 0, challenge: "", verified: ""}
     ],
     questions: [
         {id: 5, question: "How many licks does it take to get to the tootsie-roll center of a Tootsie Pop?", a: "1", b: "2", c: "3", d: "CRUNCH", e: "", answer: "CRUNCH", numberchoices: "4"},

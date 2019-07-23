@@ -15,7 +15,49 @@
   <body>
     <div id="navBar"></div>
     <h1>Exams</h1>
+    <div id="searchAddBar"></div>
     <div id="tableDiv"></div>
+    <div id="addDiv" style="display: none">
+      <h1>Student Registration</h1>
+      <div id="registerDetails">
+          <table>
+              <tr>
+                  <td align=" right">Email:</td>
+                  <td align="left"><input type="text" id="email" size="50" maxlength="50" /></td>
+              </tr>
+  
+              <tr>
+                  <td align="right">First Name:</td>
+                  <td align="left"><input type="text" id="first" size="50" maxlength="50" /></td>
+              </tr>
+  
+              <tr>
+                  <td align="right">Last Name:</td>
+                  <td align="left"><input type="text" id="last" size="50" maxlength="50"></td>
+              </tr>
+  
+              <tr>
+                  <td align="right">Password:</td>
+                  <td align="left"><input type="password" id="password" size="50" maxlength="200"></td>
+              </tr>
+  
+              <tr>
+                  <td align="right">Confirm Password:</td>
+                  <td align="left"><input type="password" id="confirmPassword" size="50" maxlength="200"></td>
+              </tr>
+              <tr>
+                <td align="right">Is Administrator?</td>
+                <td align="left"><input type="checkbox" id="isAdmin" size="50" maxlength="200"></td>
+              </tr>
+  
+              <tr>
+                  <td align="right"></td>
+                  <td align="left"><input type="button" id="submitButton" /></td>
+              </tr>
+          </table>
+      </div>
+    </form>
+  </div>
 
     <!-- Bootstrap -->
     <script src="js/jquery-3.4.1.js"></script>
