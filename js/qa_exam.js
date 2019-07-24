@@ -31,3 +31,23 @@ function loadTable(exams)
     $(tableDiv).append(table);
     buildSearchAddBar();
 }
+
+/* Populates the fields of the data entry form when modifying an existing entry.  Each page needs this function
+curData: Exam: data object to populate the fields with
+*/
+function populateFields(curData)
+{
+    // For an altogether incomprehensible reason, "name" cannot be an ID?
+    $(title).val(curData.name);
+    $(opens).val(curData.opensClean);
+    $(closes).val(curData.closesClean);
+}
+
+function getDataObject()
+{
+    var dataObj = {};
+    dataObj.name = $(title).val;
+    dataObj.opens = $(opens).val;
+    dataObj.closes = $(closes).val;
+    return dataObj;
+}

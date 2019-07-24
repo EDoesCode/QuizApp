@@ -18,41 +18,40 @@
     <div id="searchAddBar"></div>
     <div id="tableDiv"></div>
     <div id="addDiv" style="display: none">
-      <h1>Student Registration</h1>
+      <h1>Exam Form</h1>
       <div id="registerDetails">
           <table>
               <tr>
-                  <td align=" right">Email:</td>
-                  <td align="left"><input type="text" id="email" size="50" maxlength="50" /></td>
+                  <td align=" right">Name:</td>
+                  <td align="left"><input type="text" id="title" size="30" maxlength="50"/></td>
               </tr>
   
               <tr>
-                  <td align="right">First Name:</td>
-                  <td align="left"><input type="text" id="first" size="50" maxlength="50" /></td>
+                <td align="right">Open Time:</td>
+                <td align="left">
+                <div class="input-group date" id="datetimepicker7" data-target-input="nearest">
+                    <input type="text" id="opens" class="form-control datetimepicker-input" size="19" maxlength="19" data-target="#datetimepicker7"/>
+                    <div class="input-group-append" data-target="#datetimepicker7" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+                </td>
               </tr>
   
               <tr>
-                  <td align="right">Last Name:</td>
-                  <td align="left"><input type="text" id="last" size="50" maxlength="50"></td>
-              </tr>
-  
+                <td align="right">End Time:</td>
+                <td align="left">
+                    <div class="input-group date" id="datetimepicker7" data-target-input="nearest">
+                        <input type="text" id="closes" class="form-control datetimepicker-input" size="19" maxlength="19" data-target="#datetimepicker7"/>
+                        <div class="input-group-append" data-target="#datetimepicker7" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                </td>
+                </tr>
               <tr>
-                  <td align="right">Password:</td>
-                  <td align="left"><input type="password" id="password" size="50" maxlength="200"></td>
-              </tr>
-  
-              <tr>
-                  <td align="right">Confirm Password:</td>
-                  <td align="left"><input type="password" id="confirmPassword" size="50" maxlength="200"></td>
-              </tr>
-              <tr>
-                <td align="right">Is Administrator?</td>
-                <td align="left"><input type="checkbox" id="isAdmin" size="50" maxlength="200"></td>
-              </tr>
-  
-              <tr>
-                  <td align="right"></td>
-                  <td align="left"><input type="button" id="submitButton" /></td>
+                  <td align="right"><input type="button" id="cancelButton"></td>
+                  <td align="right"><input type="button" id="submitButton" /></td>
               </tr>
           </table>
       </div>
@@ -64,6 +63,29 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
+    <!-- Date Time Picker-->
+    <script type="text/javascript" src="js/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+    <script type="text/javascript">
+      $(function () {
+          $('#datetimepicker7').datetimepicker({
+              format: "M-D-YY HH:mm:ss",
+              sideBySide: true
+          });
+          $('#datetimepicker8').datetimepicker({
+              useCurrent: false,
+              format: "M-D-YY HH:mm:ss",
+              sideBySide: true
+          });
+          $("#datetimepicker7").on("change.datetimepicker", function (e) {
+              $('#datetimepicker8').datetimepicker('minDate', e.date);
+          });
+          $("#datetimepicker8").on("change.datetimepicker", function (e) {
+              $('#datetimepicker7').datetimepicker('maxDate', e.date);
+          });
+      });
+  </script>
   </body>
 
   <!-- Local JS -->
