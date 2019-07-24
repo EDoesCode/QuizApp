@@ -164,6 +164,8 @@ function openCreateModify(id = -1)
     if (id !== -1)
     {
         try {
+            if (populateFields === null)
+                throw "";
             populateFields( getDataById(data, id) );
         }
         catch(err)
@@ -178,17 +180,27 @@ function openCreateModify(id = -1)
         $(submitButton).attr("onclick", "submitData()");
         $(submitButton).attr("value", "New Student");
     }
+    $(cancelButton).attr("onclick", "cancelCreateModify()");
+    $(cancelButton).attr("value", "Cancel");
     $(addDiv).show();
 }
 
-/* Loads the div for modifying the given student by id
-id: int: Database ID for the given student
+/* Hides the CreateModify form and shows the table */
+function cancelCreateModify()
+{
+    $(addDiv).hide();
+    $(tableDiv).show();
+}
+
+/* Loads the div for modifying the given object by id
+id: int: Database ID for the given object
 */
 function openModify(id)
 {
     openCreateModify(id);
 }
 
+/* Closes the div for modifying */
 /* Returns the data object with the given ID
 dataArray: object[]: Array of objects with an id property
 id: int: ID number
@@ -362,13 +374,14 @@ function filterTable()
 /* Builds a Search/Add bar to display above a table */
 function buildSearchAddBar()
 {
+
     // Injecting raw HTML to make the bar with Bootstrap
     $(searchAddBar).html(
     `
-    <table id="crTable" class="table m-2">
+    <table id="crTable">
     <tr>
       <td><input type="text" id="searchText"/> <input type="button" id="searchButton" onclick="filterTable()" value="Search" /></td>
-      <td class="float-right pr-5"><input type="button" class="display-4" onclick="openCreateModify()" value="+" /></td>
+      <td class="float-right pr-5"><input type="button" onclick="openCreateModify()" value="Create" /></td>
     </tr>
   </table>
   `
