@@ -17,8 +17,64 @@
     <h1>Questions</h1>
     <div id="searchAddBar"></div>
     <div id="tableDiv"></div>
-    <div id="addDiv">
-      
+    <div id="addDiv" style="display: none">
+        <h1>Question Form</h1>
+        <div id="registerDetails">
+            <table>
+                <tr>
+                    <td align=" right">Question:</td>
+                    <td align="left"><textarea id="question" rows="3" cols="50" maxlength="320"></textarea></td>
+                </tr>
+    
+                <tr>
+                    <td align="right">A</td>
+                    <td align="left"><input type="text" id="answerA" size="50" maxlength="160" /></td>
+                </tr>
+    
+                <tr>
+                    <td align="right">B</td>
+                    <td align="left"><input type="text" id="answerB" size="50" maxlength="160"></td>
+                </tr>
+    
+                <tr>
+                    <td align="right">C</td>
+                    <td align="left"><input type="text" id="answerC" size="50" maxlength="160"></td>
+                </tr>
+    
+                <tr>
+                    <td align="right">D</td>
+                    <td align="left"><input type="text" id="answerD" size="50" maxlength="160"></td>
+                </tr>
+                <tr>
+                  <td align="right">E</td>
+                  <td align="left"><input type=text id="answerE" size="50" maxlength="160"></td>
+                </tr>
+                <tr>
+                    <td align="right">Answer:</td>
+                    <td align="left">
+                      <table class="table table-borderless">
+                        <tr>
+                          <td><input type="radio" name="answer" value="a"> A</input></td>
+                          <td><input type="radio" name="answer" value="b"> B</input></td>
+                        </tr>
+                        <tr>
+                            <td><input type="radio" name="answer" value="c"> C</input></td>
+                            <td><input type="radio" name="answer" value="d"> D</input></td>
+                        </tr>
+                        <tr>
+                          <td><input type="radio" name="answer" value="e"> E</input></td>
+                        </tr>
+                      </table>
+                    </td>
+                </tr>
+    
+                <tr>
+                    <td align="right"><input type="button" id="cancelButton"></td>
+                    <td align="left"><input type="button" id="submitButton" /></td>
+                </tr>
+            </table>
+        </div>
+      </form>
     </div>
     <!-- Bootstrap -->
     <script src="js/jquery-3.4.1.js"></script>
