@@ -10,7 +10,7 @@ function apiRequest(type, name, payload = null, reaction = null, showAlert = tru
 {
     var apiExtension = ".php";
     // baseURL is defined in baseURL.js
-    var url = baseURL + 'api/' + name + apiExtension;
+    var url = baseURL + 'api2/' + name + apiExtension;
 	var xhr = new XMLHttpRequest();
 	xhr.open(type, url, true);
 	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
