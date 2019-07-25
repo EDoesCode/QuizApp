@@ -161,8 +161,11 @@ id: int: ID number of data to modify.  If not modifying existing data, leave as 
 function openCreateModify(id = -1)
 {
     $(tableDiv).hide();
+    // Capitalizes the first letter of the directory name and removes the plural
+    var directoryName = directory.slice(0,1).toUpperCase() + directory.slice(1,directory.length-1);
     if (id !== -1)
     {
+        // Update form
         try {
             if (populateFields === null)
                 throw "";
@@ -173,12 +176,13 @@ function openCreateModify(id = -1)
             console.log("Cannot populate data fields without a populateFields(id) function.");
         }
         $(submitButton).attr("onclick", "updateData(" + id + ")");
-        $(submitButton).attr("value", "Update Student");
+        $(submitButton).attr("value", "Update "+directoryName);
     }
     else
     {
+        // Create form
         $(submitButton).attr("onclick", "submitData()");
-        $(submitButton).attr("value", "New Student");
+        $(submitButton).attr("value", "New "+directoryName);
     }
     $(cancelButton).attr("onclick", "cancelCreateModify()");
     $(cancelButton).attr("value", "Cancel");
