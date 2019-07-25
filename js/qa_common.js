@@ -154,6 +154,22 @@ function makeRow(type, keys, curObj)
     return row;
 }
 
+// comboNameKey: Variable that indicates which variable is used for the combo box's name
+comboNameKey = null;
+// Returns a ComboBoxOption to be appended to an existing Select box
+function makeComboBoxOption(nameKey, curObj)
+{
+    if (comboNameKey === null)
+    {
+        console.log("comboNameKey is not set on this page.");
+        return null;
+    }
+    let option = $(document.createElement('option'));
+    option.val(curObj.id);
+    option.text(curObj[nameKey]);
+    return option;
+}
+
 // Each page.js file implements populateFields() separately
 /* Opens the student adding div and closes the table div
 id: int: ID number of data to modify.  If not modifying existing data, leave as -1
@@ -231,7 +247,7 @@ getDataObject = null;
 reaction: function: Script to run using read data object.  Loads the data into the data variable and builds a table by default
 dir: string: directory to read data from.  Calls default if null
 */
-function readData(reaction = loadData, dir = null)
+function readData(reaction = loadDataTable, dir = null)
 {
     if (dir === null)
         dir = directory;
@@ -256,14 +272,23 @@ function readData(reaction = loadData, dir = null)
 loadTable = null;
 
 /* Reads received data array from a read call, sets the page's data to it, and loads the table
-newData: object[]: Object array of data entries*/
-function loadData(newData)
+newData: object[]: Object array of data entries
+*/
+function loadDataTable(newData)
 {
     data = newData;
-    var cloneData = newData.slice(0);
     // Clearing existing table, if one exists
     $(tableDiv).empty();
-    loadTable(cloneData);
+    loadTable(data);
+}
+
+/* Loads the combo box on the page with the given data array */
+function loadDataComboBox(comboData)
+{
+    var comboBox = document.createElement("select");
+    for (var i = 0; i < comboData.length; i++)
+        comboBox.append(makeComboBoxOption(comboData[i]));
+    $(comboBoxDiv).append(comboBox);
 }
 
 /* Deletes the data object with the given id from the database and reloads the page
