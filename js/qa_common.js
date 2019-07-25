@@ -228,9 +228,10 @@ directory = null;
 getDataObject = null;
 
 /* Calls an API to read the data from the page's associated directory
+reaction: function: Script to run using read data object.  Loads the data into the data variable and builds a table by default
 dir: string: directory to read data from.  Calls default if null
 */
-function readData(dir = null)
+function readData(reaction = loadData, dir = null)
 {
     if (dir === null)
         dir = directory;
@@ -245,7 +246,10 @@ function readData(dir = null)
         return;
     }
     let fullDir = directory + "/read";
-    apiRequest("GET", fullDir, null, loadData);
+    if (onServer)
+        apiRequest("GET", fullDir, null, reaction);
+    else
+        reaction(unitTests[directory]);
 }
 
 // Each page implements loadTable(dataArray) separately
@@ -420,5 +424,13 @@ unitTests = {
         {id: 2, question: "Does life on Mars exist?", a: "Yes", b: "No", c: "Maybe so", d: "", e: "", answer: "b", numberchoices: "3"},
         {id: 19, question: "What is the name of the University of Central Florida?", a: "University of Central Florida", b: "Cancun", c: "", d: "", e: "", answer: "a", numberchoices: "2"},
         {id: 53, question: "What have I got in my pocket?", a: "A bit of lint", b: "Some string", c: "A ring", d: "A New York Welcome", e: "A golden ticket", answer: "c", numberchoices: "4"}
+    ],
+    students2exams: [
+        {id: 1, examsid: 1, studentsid: 1, taken: true, score: 80},
+        {id: 2, examsid: 1, studentsid: 3, taken: false, score: null},
+        {id: 3, examsid: 2, studentsid: 1, taken: true, score: 60},
+    ],
+    questions2exams: [
+        {}
     ]
 }

@@ -2,7 +2,7 @@ $(document).ready(function() {
     $(addDiv).hide();
     data = null;
     directory = "questions";
-    loadData(unitTests[directory]);
+    readData();
 })
 
 /* Loads the exam table into tableDiv

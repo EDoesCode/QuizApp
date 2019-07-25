@@ -3,7 +3,7 @@ $(document).ready(function() {
     $(addDiv).hide();
     data = null;
     directory = "exams";
-    loadData(unitTests[directory]);
+    readData();
 })
 
 /* Loads the exam table into tableDiv
@@ -49,5 +49,9 @@ function getDataObject()
     dataObj.name = $(title).val;
     dataObj.opens = $(opens).val;
     dataObj.closes = $(closes).val;
+    if (!dataObj.name)
+        throw "Exam must have a name."
+    if (!dataObj.opens || !dataObj.closes)
+        throw "Exam must have an open and start time."
     return dataObj;
 }

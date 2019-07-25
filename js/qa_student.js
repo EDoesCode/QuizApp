@@ -3,7 +3,7 @@ $(document).ready(function() {
     $(addDiv).hide();
     data = null;
     directory = "students";
-    loadData(unitTests.students);
+    readData();
 })
 /* Loads the student table into tableDiv
 students: object[]: Array of Student objects
