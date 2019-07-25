@@ -44,7 +44,7 @@ function populateFields(curData)
 function getDataObject()
 {
     var dataObj = {};
-    dataObj.question = $(question).val;
+    dataObj.question = $(question).val();
     if (dataObj.question === "")
         throw "Question must have a question body.";
     dataObj.a = $(answerA).val();
