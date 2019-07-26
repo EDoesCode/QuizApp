@@ -4,20 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="87dp"
-        android:text="QuizApp"
-        android:textSize="100px"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:background="#FFFFFF"
+    tools:context=".Login">
 
     <Button
         android:id="@+id/register"
@@ -26,27 +14,32 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="77dp"
-        android:text="Register" />
+        android:background="#03A9F4"
+        android:text="Register"
+        android:textColor="#FFFFFF" />
 
     <Button
         android:id="@+id/login"
         android:layout_width="137dp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/register"
+        android:layout_alignEnd="@+id/register"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="143dp"
-        android:text="Login" />
+        android:layout_marginBottom="150dp"
+        android:background="#03A9F4"
+        android:text="Login"
+        android:textColor="#FFFFFF" />
 
     <EditText
         android:id="@+id/email"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="254dp"
+        android:layout_height="43dp"
+        android:layout_above="@+id/password"
+        android:layout_alignStart="@+id/password"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="8dp"
         android:ems="10"
         android:hint="Email"
-        android:inputType="textEmailAddress"/>
+        android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/password"
@@ -54,9 +47,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="237dp"
+        android:layout_marginBottom="365dp"
         android:ems="10"
-        android:inputType="textPassword"
-        android:hint="Password"/>
+        android:hint="Password"
+        android:inputType="textPassword" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="263dp"
+        android:layout_height="213dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp"
+        app:srcCompat="@drawable/logo" />
 
 </RelativeLayout>
