@@ -21,24 +21,21 @@ function apiRequest(type, name, payload = null, reaction = null, showAlert = tru
         // Only runs reaction after receiving the JSON
         if (this.readyState == 4)
         {
+            var parsedJSON = JSON.parse(this.responseText);
             // Success statuses, running the function
-            if (this.status == 200 || this.status == 201)
+            if (this.status >= 200 && this.status < 300)
             {
                 // Checking received JSON for a non-null error field
                 console.log("Received from "+url+":\n"+this.responseText);
                 console.log("Error code: "+this.status);
-                var parsedJSON = JSON.parse(this.responseText);
-                console.log("Parsed JSON successfully");
-                if (showAlert && this.message)
-                    alert(this.message);
                 if (reaction != null)
-                    reaction(parsedJSON);
+                    reaction(parsedJSON.records);
             }
             else
             {
                 // Error code, displaying message
-                if (showAlert && this.message)
-                    alert(this.message+"\nError code: "+this.status);
+                if (showAlert && this.status)
+                    window.alert(parsedJSON.message+"\nError code: "+this.status);
             }
         }
 	}
@@ -176,7 +173,7 @@ id: int: ID number of data to modify.  If not modifying existing data, leave as 
 */
 function openCreateModify(id = -1)
 {
-    $(tableDiv).hide();
+    $(displayData).hide();
     // Capitalizes the first letter of the directory name and removes the plural
     var directoryName = directory.slice(0,1).toUpperCase() + directory.slice(1,directory.length-1);
     if (id !== -1)
@@ -205,11 +202,12 @@ function openCreateModify(id = -1)
     $(addDiv).show();
 }
 
-/* Hides the CreateModify form and shows the table */
+/* Reloads the page */
 function cancelCreateModify()
 {
-    $(addDiv).hide();
-    $(tableDiv).show();
+    // $(addDiv).hide();
+    // $(tableDiv).show();
+    location.reload();
 }
 
 /* Loads the div for modifying the given object by id
@@ -306,8 +304,8 @@ function deleteData(id)
         console.log("Error: getDataObject() function not defined in this page's JS file.")
         return;
     }
-    let fullDir = directory + "/create";
-    let payload = JSON.stringify(data[id]);
+    let fullDir = directory + "/delete";
+    let payload = {id: id};
     apiRequest("DELETE", fullDir, payload)
     location.reload();
 }
@@ -327,7 +325,6 @@ function submitData(id = -1)
         console.log("Error: getDataObject() function not defined in this page's JS file.")
         return;
     }
-    let fullDir = directory + "/delete";
     var dataObject;
     try
     {
@@ -340,14 +337,16 @@ function submitData(id = -1)
     }
     // Determining request type (POST for Create, PUT for Update)
     let requestType = "POST";
+    let fullDir = directory + "/create";
     if (id != -1)
     {
         dataObject.id = id;
         requestType = "PUT";
+        fullDir = directory + "/update";
     }
-    let payload = JSON.stringify(dataObject);
-    apiRequest(requestType, fullDir, payload)
-    location.reload();
+    let payload = dataObject;
+    let reloadPage = function() {location.reload()};
+    apiRequest(requestType, fullDir, payload, reloadPage);
 }
 
 /* Submits an updated data object to the database and reloads the page

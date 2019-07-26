@@ -12,7 +12,9 @@ function loadTable(students)
 {
     // Replacing "true" and "false" strings with "yes" and "no"
     for (var i = 0; i < students.length; i++)
-        students[i].isAdminClean = (students[i].isAdmin === 1 ? "Yes" : "No")
+    {
+        students[i].isAdminClean = (students[i].isAdmin === "1" ? "Yes" : "No");
+    }
     let headers = ["First Name", "Last Name", "Email", "Admin?"];
     let keys = ["firstname", "lastname", "email", "isAdminClean"];
     let table = makeTable(TABLE_CRUD, headers, keys, students);
@@ -33,7 +35,8 @@ function populateFields(curData)
     $(last).val(curData.lastname);
     $(password).val(curData.password);
     $(confirmPassword).val(curData.password);
-    $(isAdmin).attr("checked", curData.isAdmin);
+    var checkAdmin = (curData.isAdmin == "1");
+    $(isAdmin).prop("checked", checkAdmin);
 }
 
 /* Creates a Student object from the fields on this page
@@ -48,7 +51,9 @@ function getDataObject(id = null)
     dataObj.firstname = $(first).val();
     dataObj.lastname = $(last).val();
     dataObj.password = $(password).val();
-    dataObj.isAdmin = $(isAdmin).attr("checked");
+    dataObj.isAdmin = $(isAdmin).prop("checked") ? "1" : "0";
+    dataObj.challenge = "000000";
+    dataObj.verified = true;
     // Erroneous inputs
     if (dataObj.email == "")
         throw ("Student must have an email address");

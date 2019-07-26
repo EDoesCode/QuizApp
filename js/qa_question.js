@@ -52,6 +52,12 @@ function getDataObject()
     dataObj.c = $(answerC).val();
     dataObj.d = $(answerD).val();
     dataObj.e = $(answerE).val();
+    var answers = [dataObj.a, dataObj.b, dataObj.c, dataObj.d, dataObj.e];
+    dataObj.numberchoices = 0;
+    for (var i = 0; i < answers.length; i++)
+    {
+        dataObj.numberchoices++;
+    }
     dataObj.answer =  $("input[name=answer]:checked").val();
     if (!dataObj[dataObj.answer])
         throw "Selected answer cannot be blank.";

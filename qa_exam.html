@@ -8,15 +8,17 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"></script>
 
-    <title>Welcome to the exam page!</title>
+    <title>QuizApp - Exams</title>
   </head>
 
   <!-- Page content goes here -->
   <body>
     <div id="navBar"></div>
-    <h1>Exams</h1>
-    <div id="searchAddBar"></div>
-    <div id="tableDiv"></div>
+    <div id="displayData">
+      <h1>Exams</h1>
+      <div id="searchAddBar"></div>
+      <div id="tableDiv"></div>
+    </div>
     <div id="addDiv" style="display: none">
       <h1>Exam Form</h1>
       <div id="registerDetails">
@@ -29,24 +31,24 @@
               <tr>
                 <td align="right">Open Time:</td>
                 <td align="left">
-                <div class="input-group date" id="datetimepicker7" data-target-input="nearest">
+                  <div class="input-group date" id="datetimepicker7" data-target-input="nearest">
                     <input type="text" id="opens" class="form-control datetimepicker-input" size="19" maxlength="19" data-target="#datetimepicker7"/>
                     <div class="input-group-append" data-target="#datetimepicker7" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div>
-                </div>
+                  </div>
                 </td>
               </tr>
   
               <tr>
                 <td align="right">End Time:</td>
                 <td align="left">
-                    <div class="input-group date" id="datetimepicker7" data-target-input="nearest">
-                        <input type="text" id="closes" class="form-control datetimepicker-input" size="19" maxlength="19" data-target="#datetimepicker7"/>
-                        <div class="input-group-append" data-target="#datetimepicker7" data-toggle="datetimepicker">
-                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                        </div>
+                  <div class="input-group date" id="datetimepicker8" data-target-input="nearest">
+                    <input type="text" id="closes" class="form-control datetimepicker-input" size="19" maxlength="19" data-target="#datetimepicker8"/>
+                    <div class="input-group-append" data-target="#datetimepicker8" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div>
+                  </div>
                 </td>
                 </tr>
               <tr>
@@ -62,28 +64,30 @@
     <script src="js/jquery-3.4.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
+    
     <!-- Date Time Picker-->
     <script type="text/javascript" src="js/moment.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
     <script type="text/javascript">
       $(function () {
           $('#datetimepicker7').datetimepicker({
-              format: "M-D-YY HH:mm:ss",
+              format: "YYYY-MM-DD HH:mm:ss",
               sideBySide: true
           });
           $('#datetimepicker8').datetimepicker({
-              useCurrent: false,
-              format: "M-D-YY HH:mm:ss",
+              format: "YYYY-MM-DD HH:mm:ss",
               sideBySide: true
           });
+          /*
           $("#datetimepicker7").on("change.datetimepicker", function (e) {
               $('#datetimepicker8').datetimepicker('minDate', e.date);
           });
           $("#datetimepicker8").on("change.datetimepicker", function (e) {
               $('#datetimepicker7').datetimepicker('maxDate', e.date);
           });
+          */
       });
   </script>
   </body>
