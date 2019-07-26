@@ -151,10 +151,22 @@ function makeRow(type, keys, curObj)
     return row;
 }
 
+/* Returns a combo box object filled with combo options from the given data
+objects: object[]: List of objects to transform into combo options
+*/
+function makeComboBox(objects)
+{
+    var comboBox = $(document.createElement("select"));
+    for (var i = 0; i < objects.length; i++)
+        comboBox.append(makeComboBoxOption(objects[i]));
+    return (comboBox);
+}
+
 // comboNameKey: Variable that indicates which variable is used for the combo box's name
 comboNameKey = null;
+
 // Returns a ComboBoxOption to be appended to an existing Select box
-function makeComboBoxOption(nameKey, curObj)
+function makeComboBoxOption(curObj)
 {
     if (comboNameKey === null)
     {
@@ -162,8 +174,8 @@ function makeComboBoxOption(nameKey, curObj)
         return null;
     }
     let option = $(document.createElement('option'));
-    option.val(curObj.id);
-    option.text(curObj[nameKey]);
+    option.attr("value", curObj.id);
+    option.html(curObj[comboNameKey]);
     return option;
 }
 
@@ -259,15 +271,41 @@ function readData(reaction = loadDataTable, dir = null)
         console.log("Error: loadTable(data) not defined in this page's JS file.");
         return;
     }
-    let fullDir = directory + "/read";
+    let fullDir = dir + "/read";
+    console.log(fullDir);
     if (onServer)
         apiRequest("GET", fullDir, null, reaction);
     else
-        reaction(unitTests[directory]);
+        reaction(unitTests[dir]);
 }
 
 // Each page implements loadTable(dataArray) separately
 loadTable = null;
+
+// data refers to the main table data on a page
+data = null;
+
+// comboData refers to the data stored in the combo box
+comboData = null;
+
+// mappingData refers to the data mapping between the combo box and the table data
+mappingData = null;
+
+/* Function that builds a combo box and a mapping table with the given data
+comboPath: string:  Path to the PHP that returns data for the combo box.
+tablePath: string:  Directory that stores data for the table
+mappingPath: string:  Directory that stores data that maps the two datas
+*/
+function readAndLoadMappedData(comboPath, tablePath, mappingPath)
+{
+    // Separates process into three functions that execute one-after-another asynchrously
+    var action;
+    action[0] = function(data)
+    {
+        comboData = data;
+        apiRequest("GET", tableDir, null);
+    };
+}
 
 /* Reads received data array from a read call, sets the page's data to it, and loads the table
 newData: object[]: Object array of data entries
@@ -280,13 +318,24 @@ function loadDataTable(newData)
     loadTable(data);
 }
 
-/* Loads the combo box on the page with the given data array */
-function loadDataComboBox(comboData)
+/* Loads the combo box on the page with the given data array and adds Edit button
+newData: object[]: Object array of data entries 
+*/
+function loadDataComboBox(newData)
 {
-    var comboBox = document.createElement("select");
-    for (var i = 0; i < comboData.length; i++)
-        comboBox.append(makeComboBoxOption(comboData[i]));
-    $(comboBoxDiv).append(comboBox);
+    comboData = newData;
+    $(comboBoxDiv).append(makeComboBox(comboData));
+    let button = $(document.createElement("button"));
+    button.html("Edit");
+    button.attr("onclick", "loadTableFromCombo");
+    $(comboBoxDiv).append(button);
+}
+
+/* Loads a new version of the datatable with desired mapping from the combo box
+*/
+function loadTableFromCombo()
+{
+
 }
 
 /* Deletes the data object with the given id from the database and reloads the page
@@ -413,7 +462,7 @@ function buildSearchAddBar()
     <table id="crTable">
     <tr>
       <td><input type="text" id="searchText"/> <input type="button" id="searchButton" onclick="filterTable()" value="Search" /></td>
-      <td class="float-right pr-5"><input type="button" onclick="openCreateModify()" value="Create" /></td>
+      <td class="float-right pr-5"><input type="button" id="openCreateModifyButton" onclick="openCreateModify()" value="Create" /></td>
     </tr>
   </table>
   `
