@@ -46,9 +46,10 @@ function populateFields(curData)
 function getDataObject()
 {
     var dataObj = {};
-    dataObj.name = $(title).val;
-    dataObj.opens = $(opens).val;
-    dataObj.closes = $(closes).val;
+    dataObj.name = $(title).val();
+    dataObj.opens = $(opens).val();
+    dataObj.closes = $(closes).val();
+    console.log(dataObj);
     if (!dataObj.name)
         throw "Exam must have a name."
     if (!dataObj.opens || !dataObj.closes)
