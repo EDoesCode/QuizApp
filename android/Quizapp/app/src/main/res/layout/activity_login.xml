@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="23dp"
         android:layout_marginTop="80dp"
-        android:text="All Exams"
+        android:text="All Quizes"
         android:textSize="100px"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,25 +34,13 @@
         android:textColor="#FFFFFF" />
 
     <RadioGroup
-        android:layout_width="342dp"
-        android:layout_height="251dp"
+        android:id="@+id/quizes"
+        android:layout_width="352dp"
+        android:layout_height="430dp"
         android:layout_above="@+id/logout"
+        android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="79dp" >
-
-        <RadioButton
-            android:id="@+id/radioButton"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:layout_weight="1"
-            android:text="RadioButton" />
-
-        <RadioButton
-            android:id="@+id/radioButton2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="RadioButton" />
-    </RadioGroup>
+        android:layout_marginTop="37dp"
+        android:layout_marginBottom="38dp"></RadioGroup>
 
 </RelativeLayout>

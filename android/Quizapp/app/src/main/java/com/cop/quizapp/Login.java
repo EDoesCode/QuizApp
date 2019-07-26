@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -76,9 +77,12 @@ public class Login extends AppCompatActivity {
         em = email.getText().toString();
         pass = password.getText().toString();
 
+
         String[] info = {em, pass};
         OnLogin log = new OnLogin(this);
         log.execute(info);
+
+
     }
 
     public void openRegister(){
@@ -91,7 +95,7 @@ public class Login extends AppCompatActivity {
     public class OnLogin extends AsyncTask<String, Void, JSONObject>
     {
         private Context context;
-        private boolean flag;
+        public boolean flag;
         public JSONObject response;
 
         public OnLogin(Context context){
@@ -181,8 +185,8 @@ public class Login extends AppCompatActivity {
             {
                 Toast.makeText(context, "Login", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, Exams.class);
-                context.startActivity(intent);
-                ((Activity)context).finish();
+                startActivity(intent);
+
             }
             else
             {
