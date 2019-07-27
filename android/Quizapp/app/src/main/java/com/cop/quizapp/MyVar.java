@@ -11,6 +11,14 @@ public class MyVar {
     public static int currentID;
     public static JSONArray records;
     public static JSONObject questions;
+    public static String[] qTracker;
+    public static int[] qID;
+    public static int studentID;
+
+    public static int currentQuestion = 0;
+
+    public static boolean subFlag = false;
+
 
     protected MyVar() {
     }
@@ -21,4 +29,5 @@ public class MyVar {
         }
         return mInstance;
     }
+
 }

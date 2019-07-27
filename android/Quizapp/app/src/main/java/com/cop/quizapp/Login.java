@@ -40,6 +40,12 @@ public class Login extends AppCompatActivity {
     private String pass = "";
 
     @Override
+    public void onBackPressed() {
+        finish();
+        return;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -89,6 +95,7 @@ public class Login extends AppCompatActivity {
 
         Intent reg = new Intent(this, Register.class);
         startActivity(reg);
+        finish();
 
     }
 
@@ -96,7 +103,6 @@ public class Login extends AppCompatActivity {
     {
         private Context context;
         public boolean flag;
-        public JSONObject response;
 
         public OnLogin(Context context){
             this.context=context;
@@ -186,12 +192,15 @@ public class Login extends AppCompatActivity {
                 Toast.makeText(context, "Login", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, Exams.class);
                 startActivity(intent);
-
+                ((Activity)context).finish();
+                Login.this.finish();
             }
             else
             {
                 Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
             }
+
+
 
         }
 

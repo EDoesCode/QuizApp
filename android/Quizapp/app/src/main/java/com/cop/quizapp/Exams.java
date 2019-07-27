@@ -41,6 +41,7 @@ public class Exams extends AppCompatActivity {
 
         Intent log = new Intent(Exams.this, Login.class);
         startActivity(log);
+        finish();
         return;
     }
 
@@ -70,10 +71,13 @@ public class Exams extends AppCompatActivity {
         try {
             records =  response.getJSONArray("records");
             MyVar.getInstance().records = records;
+            MyVar.getInstance().qTracker = new String[records.length()];
+            MyVar.getInstance().qID = new int[records.length()];
             for(int i = 0; i < records.length(); i++)
             {
                 name = (JSONObject)records.get(i);
                 n = (String) name.get("name");
+                MyVar.getInstance().studentID = Integer.parseInt((String) name.get("studentsid"));
 
                 addText(n, i);
             }
@@ -98,6 +102,7 @@ public class Exams extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+                MyVar.getInstance().currentQuestion = 0;
                 String[] info = {n};
                 FetchQuestions fetch = new FetchQuestions(Exams.this);
                 fetch.execute(info);
@@ -206,12 +211,15 @@ public class Exams extends AppCompatActivity {
                 Toast.makeText(context, "Questions", Toast.LENGTH_SHORT).show();
                 Intent quest = new Intent(context, Question.class);
                 startActivity(quest);
-
+                ((Activity)context).finish();
+                Exams.this.finish();
             }
             else
             {
                 Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
             }
+
+
 
         }
 
