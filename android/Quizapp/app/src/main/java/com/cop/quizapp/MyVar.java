@@ -5,7 +5,8 @@ import org.json.JSONObject;
 
 public class MyVar {
     private static MyVar mInstance = null;
-
+    public static String email = "";
+    public static String code = "";
     public static JSONObject response;
     public static String currentQuizName;
     public static int currentID;
@@ -15,6 +16,7 @@ public class MyVar {
     public static int[] qID;
     public static int studentID;
     public static JSONObject results;
+    public static String challenge;
 
     public static int currentQuestion = 0;
 
