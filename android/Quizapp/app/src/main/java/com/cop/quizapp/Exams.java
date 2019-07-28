@@ -5,10 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -52,6 +56,9 @@ public class Exams extends AppCompatActivity {
         try
         {
             this.getSupportActionBar().hide();
+            Window window = this.getWindow();
+            window.setStatusBarColor(Color.parseColor("#03A9F4"));
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         catch (NullPointerException e){}
 
@@ -71,8 +78,7 @@ public class Exams extends AppCompatActivity {
         try {
             records =  response.getJSONArray("records");
             MyVar.getInstance().records = records;
-            MyVar.getInstance().qTracker = new String[records.length()];
-            MyVar.getInstance().qID = new int[records.length()];
+
             for(int i = 0; i < records.length(); i++)
             {
                 name = (JSONObject)records.get(i);
@@ -95,14 +101,16 @@ public class Exams extends AppCompatActivity {
                 Toast.makeText(Exams.this, "Starting " + name, Toast.LENGTH_SHORT).show();
                 MyVar.getInstance().currentQuizName = name;
 
+
                 String n = "";
                 try {
-                    n = (String)((JSONObject)(MyVar.getInstance().records.get(i))).get("id");
+                    JSONObject records = (JSONObject)(MyVar.getInstance().records.get(i));
+                    n = (String)(records).get("id");
+                    MyVar.getInstance().currentQuestion = 0;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                MyVar.getInstance().currentQuestion = 0;
                 String[] info = {n};
                 FetchQuestions fetch = new FetchQuestions(Exams.this);
                 fetch.execute(info);
@@ -190,6 +198,10 @@ public class Exams extends AppCompatActivity {
                     k = sb.toString();
                     k = k.replaceAll("\"", "\\\"");
                     MyVar.getInstance().questions = new JSONObject(k);
+                    JSONArray questions = MyVar.getInstance().questions.getJSONArray("records");
+                    MyVar.getInstance().qID = new int[questions.length()];
+                    MyVar.getInstance().qTracker = new String[questions.length()];
+
                 }
                 else {
                     flag = false;

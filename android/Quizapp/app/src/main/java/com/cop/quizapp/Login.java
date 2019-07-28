@@ -5,10 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -52,6 +56,9 @@ public class Login extends AppCompatActivity {
         try
         {
             this.getSupportActionBar().hide();
+            Window window = this.getWindow();
+            window.setStatusBarColor(Color.parseColor("#03A9F4"));
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         catch (NullPointerException e){}
 

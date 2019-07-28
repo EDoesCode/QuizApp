@@ -5,9 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -61,8 +65,13 @@ public class Question extends AppCompatActivity {
         try
         {
             this.getSupportActionBar().hide();
+            Window window = this.getWindow();
+            window.setStatusBarColor(Color.parseColor("#03A9F4"));
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         catch (NullPointerException e){}
+
+        MyVar.getInstance().subFlag = true;
 
         next = findViewById(R.id.next);
         back = findViewById(R.id.back);
@@ -82,6 +91,7 @@ public class Question extends AppCompatActivity {
             questions = MyVar.getInstance().questions.getJSONArray("records");
             JSONObject name = null;
             int i = MyVar.getInstance().currentQuestion;
+
 
             for(int j = 0; j < questions.length(); j++)
             {
@@ -432,7 +442,7 @@ public class Question extends AppCompatActivity {
                     Toast.makeText(Question.this, "Submit", Toast.LENGTH_SHORT).show();
                     Intent score = new Intent(Question.this, Score.class);
                     startActivity(score);
-
+                    MyVar.getInstance().subFlag = false;
                     Question.this.finish();
                 }
                 else
@@ -443,26 +453,6 @@ public class Question extends AppCompatActivity {
         });
     }
 
-    public void addText(String n)
-    {
-        TextView ex = new TextView(this);
-        ex.setText(n);
-        RelativeLayout.LayoutParams parameter = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        parameter.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        parameter.addRule(RelativeLayout.CENTER_HORIZONTAL);
-
-        parameter.setMargins(parameter.leftMargin, top, parameter.rightMargin, parameter.bottomMargin);
-
-        top += 200;
-
-        ex.setLayoutParams(parameter);
-
-        RelativeLayout rl = findViewById(R.id.layout);
-        rl.addView(ex);
-    }
-
-
     public class SendResults extends AsyncTask<String, Void, JSONObject>
     {
         private Context context;
@@ -470,7 +460,7 @@ public class Question extends AppCompatActivity {
 
         public SendResults(Context context){
             this.context=context;
-            flag = false;
+            flag = true;
         }
         @Override
         protected void onPreExecute() {
@@ -496,7 +486,7 @@ public class Question extends AppCompatActivity {
                 con.setDoInput(true);
 
                 JSONObject payload = new JSONObject();
-                payload.put("questionsid", questionid);
+                payload.put("questionsid", Integer.parseInt(questionid));
                 payload.put("examsid", Integer.parseInt(examsid));
                 payload.put("studentsid", Integer.parseInt(studentsid));
                 payload.put("answered", answered);
@@ -508,12 +498,10 @@ public class Question extends AppCompatActivity {
                 con.connect();
                 int code = con.getResponseCode();
 
-                if(code == 200)
-                {
-                    flag = true;
-                }
-                else
+                if(code != 201)
                     flag = false;
+
+                return payload;
 
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -527,8 +515,8 @@ public class Question extends AppCompatActivity {
         @Override
         protected void onPostExecute(JSONObject res) {
             super.onPostExecute(res);
-
-            MyVar.getInstance().subFlag = flag;
+            if(flag == false)
+                MyVar.getInstance().subFlag = flag;
             ((Activity)context).finish();
         }
 

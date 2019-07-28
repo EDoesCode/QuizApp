@@ -14,10 +14,11 @@ public class MyVar {
     public static String[] qTracker;
     public static int[] qID;
     public static int studentID;
+    public static JSONObject results;
 
     public static int currentQuestion = 0;
 
-    public static boolean subFlag = false;
+    public static boolean subFlag = true;
 
 
     protected MyVar() {
