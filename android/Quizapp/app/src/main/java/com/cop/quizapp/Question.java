@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -16,21 +15,15 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -77,7 +70,7 @@ public class Question extends AppCompatActivity {
         back = findViewById(R.id.back);
         qnum = findViewById(R.id.qnum);
         answers = findViewById(R.id.answers);
-        submit = findViewById(R.id.submit);
+        submit = findViewById(R.id.emailSubmit);
         txt = findViewById(R.id.text);
         txt.setText(MyVar.getInstance().currentQuizName);
         q = findViewById(R.id.question);

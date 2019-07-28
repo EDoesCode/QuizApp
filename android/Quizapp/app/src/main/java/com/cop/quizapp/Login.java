@@ -80,7 +80,7 @@ public class Login extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openRegister();
+                startActivity(new Intent(Login.this, Email.class));
             }
         });
     }
