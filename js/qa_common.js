@@ -1,5 +1,5 @@
 /* Calls an API from the server with the given payload, then runs the provided function on the resulting response
-type: string:    Type of post request 
+type: string:    Type of post request
 name: string:    Name of API to call, does not include extension or directory
 payload: string: JSON string to send to the server
 reaction: function(object): Function to run after receiving a response from the server.  Takes a parsed JSON Object
@@ -14,7 +14,7 @@ function apiRequest(type, name, payload = null, reaction = null, showAlert = tru
 	var xhr = new XMLHttpRequest();
 	xhr.open(type, url, true);
 	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-	
+
 	// Defining reaction function
 	xhr.onreadystatechange = function()
 	{
@@ -41,7 +41,7 @@ function apiRequest(type, name, payload = null, reaction = null, showAlert = tru
 	}
 	// Echoing JSON to console
 	console.log("Posting to "+url+": \n"+JSON.stringify(payload));
-	
+
 	// Sending JSON
 	try
 	{
@@ -64,7 +64,7 @@ modifyFunc: function(id: int): A modify function to be ran upon clicking a modif
 deleteFunc: function(id: int): A delete function to be ran upon clicking a delete button.  Leave null to have no button.
 */
 const TABLE_CRUD = 0;   // Tables with MODIFY and DELETE buttons
-const TABLE_CHECK = 1;  // Tables with checkboxes (with ID labels) in the final column.  The initial value of the checkbox is set to 
+const TABLE_CHECK = 1;  // Tables with checkboxes (with ID labels) in the final column.  The initial value of the checkbox is set to
 function makeTable(type, headers, keys, objects)
 {
     if (headers.length != keys.length)
@@ -144,6 +144,7 @@ function makeRow(type, keys, curObj)
                 button.html("Delete");
                 button.attr("onclick", "deleteData("+ curObj.id+ ")");
             }
+            button.attr("class", "btn btn-primary");
             td.append(button);
             row.append(td);
         }
@@ -202,15 +203,18 @@ function openCreateModify(id = -1)
         }
         $(submitButton).attr("onclick", "updateData(" + id + ")");
         $(submitButton).attr("value", "Update "+directoryName);
+        $(submitButton).attr("class", "btn btn-primary");
     }
     else
     {
         // Create form
         $(submitButton).attr("onclick", "submitData()");
         $(submitButton).attr("value", "New "+directoryName);
+        $(submitButton).attr("class", "btn btn-primary");
     }
     $(cancelButton).attr("onclick", "cancelCreateModify()");
     $(cancelButton).attr("value", "Cancel");
+    $(cancelButton).attr("class", "btn btn-primary");
     $(addDiv).show();
 }
 
@@ -319,7 +323,7 @@ function loadDataTable(newData)
 }
 
 /* Loads the combo box on the page with the given data array and adds Edit button
-newData: object[]: Object array of data entries 
+newData: object[]: Object array of data entries
 */
 function loadDataComboBox(newData)
 {
@@ -461,8 +465,8 @@ function buildSearchAddBar()
     `
     <table id="crTable">
     <tr>
-      <td><input type="text" id="searchText"/> <input type="button" id="searchButton" onclick="filterTable()" value="Search" /></td>
-      <td class="float-right pr-5"><input type="button" id="openCreateModifyButton" onclick="openCreateModify()" value="Create" /></td>
+      <td><input type="text" id="searchText"/> <input type="button" id="searchButton" onclick="filterTable()" value="Search" class="btn btn-primary"/></td>
+      <td class="float-right pr-5"><input type="button" id="openCreateModifyButton" onclick="openCreateModify()" value="Create" class="btn btn-primary"/></td>
     </tr>
   </table>
   `
