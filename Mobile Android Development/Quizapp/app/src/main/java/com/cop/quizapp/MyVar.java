@@ -16,6 +16,7 @@ public class MyVar {
     public static int[] qID;
     public static int studentID;
     public static JSONObject results;
+
     public static String challenge;
 
     public static int currentQuestion = 0;

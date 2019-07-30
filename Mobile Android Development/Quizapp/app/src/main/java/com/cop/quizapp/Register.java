@@ -60,11 +60,9 @@ public class Register extends AppCompatActivity {
                 EditText password = (EditText) findViewById(R.id.rPassword);
                 String pw = password.getText().toString();
 
-                EditText email = findViewById(R.id.emailCheck);
-                String registerEmail = email.getText().toString();
+                String registerEmail = MyVar.getInstance().email;
 
-                EditText code = findViewById(R.id.codeCheck);
-                String c = code.getText().toString();
+                String c = MyVar.getInstance().challenge;
 
                 String[] info = {fName, lName, pw, registerEmail, c};
                 onRegister log = new onRegister(Register.this);
@@ -148,7 +146,7 @@ public class Register extends AppCompatActivity {
                         k = sb.toString();
                         k = k.replaceAll("\"", "\\\"");
 
-                        MyVar.getInstance().response = new JSONObject(k);
+                        JSONObject response = new JSONObject(k);
                     }
                     else
                     {
