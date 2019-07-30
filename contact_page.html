@@ -1,0 +1,64 @@
+<html>
+	<head>
+		<title>Contact Manager - Contacts</title>
+		<script type="text/javascript" src="js/contact_page.js">
+		</script>
+		<link href="css/contact_page.css" rel="stylesheet">
+		<link href="css/styles.css" rel="stylesheet">
+		<link href="js/contact_page.js" rel="javascript">
+		<script type="text/javascript" src="js/contact_page.js"></script>
+	</head>
+
+	<body onload="getAllContacts()">
+		<div id="mainBox">
+			<h1>Your Contacts</h1>
+			<table id="bodyTable">
+			<tr>
+				<td id="searchCell">
+					<h3>Search Contacts</h3>
+					<input type="text" id="searchText"/>
+					<input type="button" value="Search" onclick="searchContacts()"/>
+					<br /> <br />
+					<input type="button" value="Clear Search" onclick="refreshPage()" /> <input type="button" value="Log Out" onclick="logOut()" />
+					<div id="responseText" class="errorField"></div>
+				</td>
+				<td id="listCell" rowspan="2">
+				<table id="contactTable">
+				<tr>
+					<th style="width: 70">First</th>
+					<th style="width: 70">Last</th>
+					<th style="width: 120">Phone</th>
+					<th style="width: 200">Email</th>
+					<th colspan="2" style="width: 300">Address</th>
+					<th style="width: 100">City</th>
+					<th style="width: 40">State</th>
+					<th style="width: 60">ZIP</th>
+					<th class="emptycell" colspan="2"></th>
+				</tr>
+				</table>
+				<div id="tableResponse" class="errorField"></div>
+				</td>
+			</tr>
+			<tr>
+				<td id="addCell">
+				<h3>New Contact</h3>
+				<table id="addTable">
+					<tr><td>First Name:</td><td><input type="text" id="FirstName"/></td></tr>
+					<tr><td>Last Name:</td> <td><input type="text" id="LastName"/></td></tr>
+					<tr><td>Phone:</td> <td><input type="text" id="Phone" size="12" maxlength="14"/></td></tr>
+					<tr><td>Email:</td> <td><input type="text" id="Email"/></td></tr>
+					<tr><td>Address (1):</td> <td><input type="text" id="Address1"/></td></tr>
+					<tr><td>Address (2):</td> <td><input type="text" id="Address2"/></td></tr>
+					<tr><td>City:</td> <td><input type="text" id="City"/></td></tr>
+					<tr><td>State:</td> <td><input type="text" id="State" size="2" maxlength="2"/></td></tr>
+					<tr><td>Zip:</td> <td><input type="text" id="Zip" size="5" maxlength="5" /></td></tr>
+					<tr><td colspan=2><input type="button" value="Add Contact" onclick="addContact()" /></td></tr>
+				</table>
+				<br />
+				<div id="addText" class="errorField"></div>
+				</td>
+			</tr>
+			</table>
+		</div>
+	</body>
+</html>
