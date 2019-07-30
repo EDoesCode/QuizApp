@@ -47,6 +47,7 @@ function loadTable(questions)
     // Adding "Save Changes" button
     button.attr("onclick", "saveChanges()");
     button.html("Save Changes");
+    button.attr("class", "btn btn-primary");
     $(tableDiv).append(button);
 }
 
