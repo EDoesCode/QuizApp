@@ -4,9 +4,10 @@ name: string:    Name of API to call, does not include extension or directory
 payload: string: JSON string to send to the server
 reaction: function(object): Function to run after receiving a response from the server.  Takes a parsed JSON Object
 showAlert: If true, shows an alert containing the message received from the server (will not show an alert without a message)
+failedReaction: function(): Function to run after receiving a negative response from the server.
 */
 
-function apiRequest(type, name, payload = null, reaction = null, showAlert = true)
+function apiRequest(type, name, payload = null, reaction = null, showAlert = true, failedReaction = null)
 {
     var apiExtension = ".php";
     // baseURL is defined in baseURL.js
@@ -36,6 +37,8 @@ function apiRequest(type, name, payload = null, reaction = null, showAlert = tru
                 // Error code, displaying message
                 if (showAlert && this.status)
                     window.alert(parsedJSON.message+"\nError code: "+this.status);
+                if (failedReaction !== null)
+                    failedReaction();
             }
         }
 	}
@@ -99,7 +102,7 @@ function makeTable(type, headers, keys, objects)
 }
 
 /* Returns a row to be appended to a table.
-type: string: Type of table to make.  Can be TABLE_CRUD, TABLE_CHECK, or TABLE_QUESTION
+type: int: Type of table to make.  Can be TABLE_CRUD, TABLE_CHECK, or TABLE_QUESTION
 headers: string[]:  Headers on the top row of the table
 keys: string[]:     Variables within the object to place in each column.  Should loosely match headers
 curObj: object:     Object containing data to populate the row with.
@@ -120,7 +123,7 @@ function makeRow(type, keys, curObj)
             if (cellVal == "false" || !cellVal)
                 checked = false;
             checkBox.attr("checked", checked);
-            checkBox.attr("id", curObj.id);
+            checkBox.attr("id", "check" + curObj.id);
             td.append(checkBox);
         }
         else
@@ -151,10 +154,24 @@ function makeRow(type, keys, curObj)
     return row;
 }
 
+/* Returns a combo box object filled with combo options from the given data
+objects: object[]: List of objects to transform into combo options
+*/
+function makeComboBox(objects)
+{
+    var comboBox = $(document.createElement("select"));
+    for (var i = 0; i < objects.length; i++)
+        comboBox.append(makeComboBoxOption(objects[i]));
+    comboBox.attr("id", "comboBox");
+    comboBox.change(loadTableFromCombo);
+    return (comboBox);
+}
+
 // comboNameKey: Variable that indicates which variable is used for the combo box's name
 comboNameKey = null;
+
 // Returns a ComboBoxOption to be appended to an existing Select box
-function makeComboBoxOption(nameKey, curObj)
+function makeComboBoxOption(curObj)
 {
     if (comboNameKey === null)
     {
@@ -162,8 +179,8 @@ function makeComboBoxOption(nameKey, curObj)
         return null;
     }
     let option = $(document.createElement('option'));
-    option.val(curObj.id);
-    option.text(curObj[nameKey]);
+    option.attr("value", curObj.id);
+    option.html(curObj[comboNameKey]);
     return option;
 }
 
@@ -190,15 +207,19 @@ function openCreateModify(id = -1)
         }
         $(submitButton).attr("onclick", "updateData(" + id + ")");
         $(submitButton).attr("value", "Update "+directoryName);
+        window.location.hash = "modify" + id;
     }
     else
     {
         // Create form
         $(submitButton).attr("onclick", "submitData()");
-        $(submitButton).attr("value", "New "+directoryName);
+        $(submitButton).attr("value", "Add "+directoryName);
+        $(submitButton).attr("class", "btn btn-primary");
+        window.location.hash = "create";
     }
     $(cancelButton).attr("onclick", "cancelCreateModify()");
     $(cancelButton).attr("value", "Cancel");
+    $(cancelButton).attr("class", "btn btn-primary");
     $(addDiv).show();
 }
 
@@ -207,6 +228,12 @@ function cancelCreateModify()
 {
     // $(addDiv).hide();
     // $(tableDiv).show();
+    if (window.location.hash)
+    {
+        // window.location = window.location.href.split('#')[0];
+        // console.log(window.location.hash)
+        history.pushState(null, null, ' ');
+    }
     location.reload();
 }
 
@@ -254,20 +281,44 @@ function readData(reaction = loadDataTable, dir = null)
         console.log("Error: directory not defined in this page's JS file.");
         return;
     }
-    if (loadTable === null)
+    if (reaction === loadDataTable && loadTable === null)
     {
         console.log("Error: loadTable(data) not defined in this page's JS file.");
         return;
     }
-    let fullDir = directory + "/read";
+    let fullDir = dir + "/read";
     if (onServer)
         apiRequest("GET", fullDir, null, reaction);
     else
-        reaction(unitTests[directory]);
+        reaction(unitTests[dir]);
 }
 
 // Each page implements loadTable(dataArray) separately
 loadTable = null;
+
+// data refers to the main table data on a page
+data = null;
+
+// comboData refers to the data stored in the combo box
+comboData = null;
+
+// mappingData refers to the data mapping between the combo box and the table data
+mappingData = null;
+
+/* Function that builds a combo box and a mapping table with the given data
+comboPath: string:  Path to the PHP that returns data for the combo box.
+tablePath: string:  Directory that stores data for the table
+*/
+function readAndLoadMappedData(comboDir, tableDir)
+{
+    // Separates process into two functions that execute one-after-another through api requests
+    var readTableThenCombo = function(receivedData)
+    {
+        data = receivedData;
+        readData(loadDataComboBox, comboDir);
+    }
+    readData(readTableThenCombo, tableDir)
+}
 
 /* Reads received data array from a read call, sets the page's data to it, and loads the table
 newData: object[]: Object array of data entries
@@ -280,13 +331,31 @@ function loadDataTable(newData)
     loadTable(data);
 }
 
-/* Loads the combo box on the page with the given data array */
-function loadDataComboBox(comboData)
+/* Loads the combo box on the page with the given data array and adds Edit button
+newData: object[]: Object array of data entries 
+*/
+function loadDataComboBox(newData)
 {
-    var comboBox = document.createElement("select");
-    for (var i = 0; i < comboData.length; i++)
-        comboBox.append(makeComboBoxOption(comboData[i]));
-    $(comboBoxDiv).append(comboBox);
+    comboData = newData;
+    $(comboBoxDiv).append(makeComboBox(comboData));
+    loadTableFromCombo();
+}
+
+/* Loads a new version of the datatable with desired mapping from the combo box */
+function loadTableFromCombo()
+{
+    var payload = {examsid: $(comboBox).val()};
+    var loadMappedTable = function(maps) {
+        mappingData = maps;
+        $(tableDiv).empty();
+        loadTable(data);
+    }
+    var loadEmptyMaps = function() {
+        mappingData = [];
+        $(tableDiv).empty();
+        loadTable(data);
+    }
+    apiRequest("POST", directory+"/readByExamID", payload, loadMappedTable, false, loadEmptyMaps);
 }
 
 /* Deletes the data object with the given id from the database and reloads the page
@@ -380,6 +449,9 @@ function filterTable()
         {
             // Iterating through each property on the data
             var curProp = curData[props[j]];
+            // Cannot check null data
+            if (curProp === null)
+                continue;
             var valid = false;
             // Strings can contain the search term as a substring
             if (propTypes[j] == "string")
@@ -406,14 +478,13 @@ function filterTable()
 /* Builds a Search/Add bar to display above a table */
 function buildSearchAddBar()
 {
-
     // Injecting raw HTML to make the bar with Bootstrap
     $(searchAddBar).html(
     `
     <table id="crTable">
     <tr>
-      <td><input type="text" id="searchText"/> <input type="button" id="searchButton" onclick="filterTable()" value="Search" /></td>
-      <td class="float-right pr-5"><input type="button" onclick="openCreateModify()" value="Create" /></td>
+      <td><input type="text" id="searchText" size="40" placeholder="Push search to clear filter"/> <input type="button" id="searchButton" class="btn btn-primary" onclick="filterTable()" value="Search" /></td>
+      <td class="float-right pr-5"><input type="button" id="openCreateModifyButton" onclick="openCreateModify()" value="Create" class="btn btn-primary" /></td>
     </tr>
   </table>
   `
@@ -425,6 +496,28 @@ function buildSearchAddBar()
             $(searchButton).click();
         }
     })
+}
+
+// Opening Create div if URL contains "create"
+function jumpToCreate()
+{
+    // Adding jumping functionality to link
+    $(window).on('hashchange', jumpToCreate);
+    // Jumping straight to create if link ends in #create
+    var url = window.location.href;
+    var command = url.split("#")[1];
+    if (command == "create")
+    {
+        // Clearing any existing fields
+        $(":input", "#addDiv")
+        .not(':button, :radio, :submit, :reset, :hidden')
+        .val('')
+        .prop('checked', false)
+        .prop('selected', false);
+        openCreateModify();
+        return true;
+    }
+    return false;
 }
 
 // Testing object that contains testing functions and sample data
@@ -453,8 +546,6 @@ unitTests = {
         {id: 1, examsid: 1, studentsid: 1, taken: true, score: 80},
         {id: 2, examsid: 1, studentsid: 3, taken: false, score: null},
         {id: 3, examsid: 2, studentsid: 1, taken: true, score: 60},
-    ],
-    questions2exams: [
-        {}
     ]
 }
+

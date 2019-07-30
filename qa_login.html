@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-100">
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -7,25 +7,39 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <title>QuizApp - Login</title>
   </head>
-  <body>
+  <body class="h-100" style="background-color: #1B4C89">
     <div id="navBar"></div>
 
     <!-- Page content goes here -->
     <title>QuizApp Login</title>
-
-    <form class="mx-3" style="max-width: 300px;">
-      <div class="form-group">
-        <label for="InputEmail">Email address</label>
-        <input type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp" placeholder="name@example.com">
+    <div class="container h-100">
+      <div class="row h-100">
+        <div class="col d-flex flex-column my-auto">
+          <div class="row ">
+            <h2 class="mx-auto mb-2"><img src="images/quizapplogo.png"></h2>
+          </div>
+          <div class="row">
+            <div class="card mx-auto my-auto" style="">
+              <div class="card-body">
+                <form class="mx-3" style="">
+                  <div class="form-group">
+                    <label for="InputEmail">Email address</label>
+                    <input type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp" placeholder="name@example.com">
+                  </div>
+                  <div class="form-group">
+                    <label for="InputPassword">Password</label>
+                    <input type="password" class="form-control" id="InputPassword" placeholder="Password">
+                  </div>
+                  <button type="button" class="btn btn-primary" onclick="qaLogin()">Submit</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="InputPassword">Password</label>
-        <input type="password" class="form-control" id="InputPassword" placeholder="Password">
-      </div>
-      <button type="button" class="btn btn-primary" onclick="qaLogin()">Submit</button>
-    </form>
+    </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -35,5 +49,6 @@
   </body>
   <script src="js/baseURL.js"></script>
   <script src="js/qa_common.js"></script>
+  <script src="js/hashes.js"></script>
   <script src="js/qa_login.js"></script>
 </html>
