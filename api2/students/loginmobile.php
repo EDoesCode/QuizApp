@@ -2,7 +2,10 @@
 // required headers
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
- 
+header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Max-Age: 3600");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
 // include database and object files
 include_once '../config/database.php';
 include_once '../objects/students.php';
@@ -20,7 +23,7 @@ $students->email = $data->email;
 $students->password = $data->password;
 
 // query students
-$stmt = $students->login();
+$stmt = $students->loginmobile();
 $num = $stmt->rowCount();
 
 // check if more than 0 record found
@@ -42,8 +45,7 @@ if($num>0){
             "id" => $id,
             "name" => $name,
             "opens" => $opens,
-            "closes" => $closes,
-            "studentsid" => $studentsid
+            "closes" => $closes
         );
  
         array_push($students_arr["records"], $students_item);
@@ -57,11 +59,10 @@ if($num>0){
 } else {
  
   // set response code - 404 Not found
-  http_response_code(200);
+  http_response_code(404);
 
   // tell the user no students found
-  //   echo json_encode(
-  //       array("message" => "Invalid username or password.")
-  //   );
-  echo '{ "records": [ {} ] }';
+  echo json_encode(
+      array("message" => "Invalid username or password.")
+  );
 }

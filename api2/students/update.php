@@ -47,6 +47,6 @@ else{
     http_response_code(503);
  
     // tell the user
-    echo json_encode(array("message" => "Unable to update students."));
+    echo json_encode(array("message" => "Unable to update students. You cannot update the email address if that address has already been used."));
 }
 ?>

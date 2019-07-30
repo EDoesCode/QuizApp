@@ -19,7 +19,14 @@ $questions = new Questions($db);
  
 // get questions id
 $data = json_decode(file_get_contents("php://input"));
- 
+
+// Validate required fields
+if( $data->id == null) {
+  http_response_code(404);
+  echo json_encode(array("message" => "Missing required data."));
+  exit();
+}
+
 // set questions id to be deleted
 $questions->id = $data->id;
  
@@ -40,6 +47,6 @@ else{
     http_response_code(503);
  
     // tell the user
-    echo json_encode(array("message" => "Unable to delete question. Maybe assigned to an existing exam."));
+    echo json_encode(array("message" => "Unable to delete question. Question cannot be deleted if assigned to an exam or has exam history."));
 }
 ?>

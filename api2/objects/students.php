@@ -181,22 +181,48 @@ class Students{
     //file_put_contents("debug0.txt", $num, FILE_APPEND);
     
     if($num==0){
-      return $stmt; // Needs invalid username/password message
+      http_response_code(404);
+      echo json_encode(
+        array("message" => "Invalid username or password.")
+      );
+      exit();
+      // return $stmt; // Needs invalid username/password message
     } 
     
     $result = $stmt->fetch();  // May need PDO::FETCH_ASSOC inside ()
     $resultID = $result["id"];
     //file_put_contents("debug1.txt", $result, FILE_APPEND);
-    $query2 = "SELECT e.id, e.name, e.opens, e.closes
+    $query2 = "SELECT e.id, e.name, e.opens, e.closes, se.studentsid
                FROM students2exams se, exams e
                WHERE se.examsid =  e.id
                AND se.studentsid = $resultID
                AND e.opens < current_timestamp
-               AND e.closes > current_timestamp";
+               AND e.closes > current_timestamp
+               AND se.taken = 0";
     //file_put_contents("debug2.txt", $query2, FILE_APPEND);
     $stmt2 = $this->conn->prepare($query2);           
     $stmt2->execute();
     return $stmt2;
+  }
+
+  // log a student in
+  function loginWeb(){
+    // validate login email/password
+    $query = "SELECT id, email FROM students WHERE email = :email AND  password=:password";
+
+    // prepare query statement
+    $stmt = $this->conn->prepare($query);
+    
+    // Sanitize and bind
+    $this->email=htmlspecialchars(strip_tags($this->email));
+    $this->password=htmlspecialchars(strip_tags($this->password));
+    $stmt->bindParam(":email", $this->email);
+    $stmt->bindParam(":password", $this->password);
+
+    // execute query
+    $stmt->execute();
+    
+    return $stmt;
   }
   
 }

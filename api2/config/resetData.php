@@ -16,7 +16,8 @@
   // Execute sql script
   try {
     $db->exec($sql);
-    print("Reset Demo Data");
+    header('Content-type: application/json');
+    echo '{"message" : "Reset Demo Data"}';
   }
   catch(PDOException $e)
   {

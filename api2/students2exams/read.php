@@ -5,22 +5,17 @@ header("Content-Type: application/json; charset=UTF-8");
  
 // include database and object files
 include_once '../config/database.php';
-include_once '../objects/students.php';
+include_once '../objects/students2exams.php';
  
 // instantiate database and students object
 $database = new Database();
 $db = $database->getConnection();
 
 // initialize object
-$students = new Students($db);
-
-// get posted data
-$data = json_decode(file_get_contents("php://input"));
-$students->email = $data->email;
-$students->password = $data->password;
+$students = new Students2Exams($db);
 
 // query students
-$stmt = $students->login();
+$stmt = $students->read();
 $num = $stmt->rowCount();
 
 // check if more than 0 record found
@@ -37,13 +32,13 @@ if($num>0){
         // this will make $row['name'] to
         // just $name only
         extract($row);
- 
+        
+        // examsid, studentsid, taken, score
         $students_item=array(
-            "id" => $id,
-            "name" => $name,
-            "opens" => $opens,
-            "closes" => $closes,
-            "studentsid" => $studentsid
+            "examsid" => $examsid,
+            "studentsid" => $studentsid,
+            "taken" => $taken,
+            "score" => $score
         );
  
         array_push($students_arr["records"], $students_item);
@@ -57,11 +52,10 @@ if($num>0){
 } else {
  
   // set response code - 404 Not found
-  http_response_code(200);
+  http_response_code(404);
 
   // tell the user no students found
-  //   echo json_encode(
-  //       array("message" => "Invalid username or password.")
-  //   );
-  echo '{ "records": [ {} ] }';
+  echo json_encode(
+      array("message" => "No mappings for students to exams found.")
+  );
 }

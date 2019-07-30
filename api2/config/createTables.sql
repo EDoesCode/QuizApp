@@ -44,7 +44,8 @@ CREATE TABLE questions2exams (
     questionsid    INT,
     PRIMARY KEY(id),
     FOREIGN KEY (examsid) REFERENCES exams(id),
-    FOREIGN KEY (questionsid) REFERENCES questions(id)
+    FOREIGN KEY (questionsid) REFERENCES questions(id),
+    UNIQUE (examsid,questionsid)
 ) ENGINE=INNODB;
 
 CREATE TABLE students2exams (
@@ -55,7 +56,8 @@ CREATE TABLE students2exams (
     score          float,
     PRIMARY KEY(id),
     FOREIGN KEY (examsid) REFERENCES exams(id),
-    FOREIGN KEY (studentsid) REFERENCES students(id)
+    FOREIGN KEY (studentsid) REFERENCES students(id),
+    UNIQUE (examsid,studentsid)
 ) ENGINE=INNODB;
 
 CREATE TABLE examresults (
@@ -64,10 +66,20 @@ CREATE TABLE examresults (
     studentsid     INT,
     questionsid    INT,
     answered       VARCHAR(1),
+    correct        VARCHAR(1),
     PRIMARY KEY(id),
     FOREIGN KEY (examsid) REFERENCES exams(id),
     FOREIGN KEY (studentsid) REFERENCES students(id),
     FOREIGN KEY (questionsid) REFERENCES questions(id)
-)
+) ENGINE=INNODB;
 
+DELIMITER $$
+
+CREATE TRIGGER getanswer BEFORE INSERT ON examresults
+FOR EACH ROW 
+BEGIN
+  SET @var = NULL;
+  SELECT answer INTO @var FROM questions WHERE id = NEW.questionsid;
+  SET NEW.correct = @var;  
+END$$
 

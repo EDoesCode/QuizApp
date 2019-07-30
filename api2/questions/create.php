@@ -65,6 +65,6 @@ if(
     http_response_code(400);
  
     // tell the user
-    echo json_encode(array("message" => "Unable to create question. Data is incomplete."));
+    echo json_encode(array("message" => "Unable to create question. Data is incomplete. Questions must have at least two answers."));
 }
 ?>
