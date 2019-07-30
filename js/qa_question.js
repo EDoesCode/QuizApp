@@ -2,7 +2,10 @@ $(document).ready(function() {
     $(addDiv).hide();
     data = null;
     directory = "questions";
+    var upperCaseDirectory = directory.charAt(0).toUpperCase()+directory.substring(1);
+    $(pageTitle).html(upperCaseDirectory);
     readData();
+    jumpToCreate();
 })
 
 /* Loads the exam table into tableDiv
@@ -58,9 +61,10 @@ function getDataObject()
     {
         dataObj.numberchoices++;
     }
-    dataObj.answer =  $("input[name=answer]:checked").val();
-    if (!dataObj[dataObj.answer])
-        throw "Selected answer cannot be blank.";
+    dataObj.answer =  $('input[name=answer]:checked').val();
+    // console.log(dataObj.answer);
+    // if (!dataObj[dataObj.answer])
+    //     throw "Selected answer cannot be blank.";
     console.log(dataObj);
     return dataObj;
 }

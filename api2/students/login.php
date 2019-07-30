@@ -42,7 +42,8 @@ if($num>0){
             "id" => $id,
             "name" => $name,
             "opens" => $opens,
-            "closes" => $closes
+            "closes" => $closes,
+            "studentsid" => $studentsid
         );
  
         array_push($students_arr["records"], $students_item);
@@ -56,10 +57,11 @@ if($num>0){
 } else {
  
   // set response code - 404 Not found
-  http_response_code(404);
+  http_response_code(200);
 
   // tell the user no students found
-  echo json_encode(
-      array("message" => "Invalid username or password.")
-  );
+  //   echo json_encode(
+  //       array("message" => "Invalid username or password.")
+  //   );
+  echo '{ "records": [ {} ] }';
 }

@@ -19,7 +19,14 @@ $exams = new Exams($db);
  
 // get exams id
 $data = json_decode(file_get_contents("php://input"));
- 
+
+// Validate required fields
+if( $data->id == null) {
+  http_response_code(404);
+  echo json_encode(array("message" => "Missing required data."));
+  exit();
+}
+
 // set exams id to be deleted
 $exams->id = $data->id;
  
@@ -40,6 +47,6 @@ else{
     http_response_code(503);
  
     // tell the user
-    echo json_encode(array("message" => "Unable to delete exam."));
+    echo json_encode(array("message" => "Unable to delete exam. You cannot delete an exam that has students assigned or has exam history."));
 }
 ?>

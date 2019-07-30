@@ -1,0 +1,907 @@
+openapi: 3.0.0
+info:
+  title: QuizApp API
+  description: "QuizApp Web Application<br>
+                UCF COP 4331 Spring 2019 Large project.<br><br>
+                Team Members: <br>
+                1. Enelson Castro<br>
+                2. Mark Fuller<br>
+                3. Thanh Dat Le<br>
+                4. Nicholas Riley<br>
+                5. Michael Santiago<br>
+                Professor - Dr. Richard Leinecker<br><br>
+                <a href='https://fullernetwork.com/api2/config/showtables.php' target='_blank'>Show All Table Data</a><br>
+                <a href='https://github.com/LionHearted56/QuizApp' target='_blank'>GitHub Repository</a><br>
+                <a href='https://docs.google.com/presentation/d/16AlUi1u3YJbRpXVTVouE8WLZlp--vN-dUik1mY3ucBk/edit' target='_blank'>Pitch Presentation</a><br><br>
+                <a href='https://fullernetwork.com/qa_login.html' target='_blank'>Web application login (Personal hosting)</a><br>
+                <a href='https://cop4331.a2hosted.com/qa_login.html' target='_blank'>Web application login (Paid hosting)</a>"
+  version: 1.0.0
+servers:
+  - url: https://fullernetwork.com/api2
+    description: Personal hosted account
+  - url: https://cop4331.a2hosted.com/api2
+    description: Purchased hosting account
+tags:
+  - name: Admin
+    description: Administrative REST functions
+  - name: Students
+    description: Students with email verified
+  - name: Questions
+    description: Pool of all questions
+  - name: Exams
+    description: Exams with open and close date/times
+  - name: Students2Exams
+    description: Mapping of students assigned to exams
+  - name: Questions2Exams
+    description: Mapping of questions to exams
+  - name: ExamResults
+    description: Exam results per question
+paths:
+  /config/resetData.php:
+    get:
+      tags:
+        - Admin
+      summary: Resets all demo data (Admin)
+      responses:
+        "200":
+          description: Successful operation
+  /config/showtables.php:
+    get:
+      tags:
+        - Admin
+      summary: Dumps all table data (Admin)
+      responses:
+        "200":
+          description: Successful operation
+  /students/loginweb.php:
+    post:
+      tags: 
+        - Admin
+      summary: Login to web application (Admin)
+      description: Object needed for login operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+            example:
+              email: fuller.mark.e@gmail.com
+              password: welcome123
+        required: true
+      responses:
+        "200":
+          description: Login successful
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  email:
+                    type: string
+        "404":
+          description: Invalid username or password
+  /students/login.php:
+    post:
+      tags: 
+        - Admin
+      summary: Login to mobile application. (Mobile)
+      description: Object needed for login operation. Returns list of exams the student is eligible to take.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+            example:
+              email: fuller.mark.e@gmail.com
+              password: welcome123
+        required: true
+      responses:
+        "200":
+          description: Login successful
+        "404":
+          description: Invalid username or password
+  /students/getcode.php:
+    post:
+      tags: 
+        - Admin
+      summary: Verify unique email and receive challenge code (Mobile)
+      description: Object needed for get challenge code operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+            example:
+              email: fuller.mark.e@gmail.com
+        required: true
+      responses:
+        "200":
+          description: Verification code sent to email address
+        "400":
+          description: Data is incomplete
+        "503":
+          description: Unable to generate verification code. Could be duplicate email address.
+  /students/verifycode.php:
+    post:
+      tags: 
+        - Admin
+      summary: Validate challenge code to prove email is real (Deprecated)
+      description: Object needed for verify challenge code operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - challenge
+              properties:
+                email:
+                  type: string
+                challenge:
+                  type: string
+            example:
+              email: fuller.mark.e@gmail.com
+              challenge: '389457'
+        required: true
+      responses:
+        "200":
+          description: Email verified
+        "400":
+          description: Verification code incorrect
+  /students/create.php:
+    post:
+      tags:
+        - Students
+      summary: Add a new student (Admin)
+      description: Student object needed for create operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - firstname
+                - lastname
+                - email
+                - password
+                - challenge
+              properties:
+                firstname:
+                  type: string
+                lastname:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                isAdmin:
+                  type: boolean
+                challenge:
+                  type: string
+                verified:
+                  type: boolean
+              example:
+                firstname: Mark
+                lastname: Fuller
+                email: fuller.mark.e@gmail.com
+                password: welcome123
+                isAdmin: false
+                challenge: '495286'
+                verified: true
+        required: true
+      responses:
+        "201":
+          description: Student was created
+        "400":
+          description: Data is incomplete
+        "503":
+          description: Database error
+  /students/read.php:
+    get:
+      tags:
+        - Students
+      summary: List all students (Admin)
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/students"
+        "404":
+          description: No students found
+  /students/update.php:
+    put:
+      tags:
+        - Students
+      summary: Update a student (Admin)
+      requestBody:
+        content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/students"
+      responses:
+        "200":
+          description: Student was updated
+        "503":
+          description: Unable to update student
+  /students/delete.php:
+    delete:
+      tags:
+        - Students
+      summary: Delete a student (Admin)
+      description: Student object needed for delete operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: integer
+                  format: int64
+              example:
+                id: 10
+        required: true
+      responses:
+        "200":
+          description: Student was deleted.
+        "404":
+          description: Missing required data.
+        "503":
+          description: Unable to delete student.
+  /questions/create.php:
+    post:
+      tags:
+        - Questions
+      summary: Add a new question to pool (Admin)
+      description: Question object needed for create operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - question
+                - a
+                - b
+                - answer
+                - numberchoices
+              properties:
+                question:
+                  type: string
+                a:
+                  type: string
+                b:
+                  type: string
+                c:
+                  type: string
+                d:
+                  type: string
+                e:
+                  type: string
+                answer:
+                  type: string
+                numberchoices:
+                  type: number
+                  format: int64
+              example:
+                question: 'Do you expect an A in this class?'
+                a: 'True' 
+                b: 'False'
+                c: null
+                d: null
+                e: null
+                answer: a
+                numberchoices: 2
+        required: true
+      responses:
+        "201":
+          description: Question was created
+        "400":
+          description: Data is incomplete
+        "503":
+          description: Database error
+  /questions/read.php:
+    get:
+      tags:
+        - Questions
+      summary: List all questions (Admin)
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/questions"
+        "404":
+          description: No questions found
+  /questions/update.php:
+    put:
+      tags:
+        - Questions
+      summary: Update a question (Admin)
+      requestBody:
+        content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/questions"
+      responses:
+        "200":
+          description: Student was updated
+        "503":
+          description: Unable to update student
+  /questions/delete.php:
+    delete:
+      tags:
+        - Questions
+      summary: Delete a question (Admin)
+      description: Question object needed for delete operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: integer
+                  format: int64
+              example:
+                id: 10
+        required: true
+      responses:
+        "200":
+          description: Question was deleted.
+        "404":
+          description: Missing required data.
+        "503":
+          description: Unable to delete question.
+  /exams/create.php:
+    post:
+      tags:
+        - Exams
+      summary: Add a new exam (Admin)
+      description: Exam object needed for create operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - opens
+                - closes
+              properties:
+                name:
+                  type: string
+                opens:
+                  type: string
+                  format: date-time
+                closes:
+                  type: string
+                  format: date-time
+              example:
+                name: COP4331_Exam1
+                opens: '2019-07-12 08:00:00'
+                closes: '2019-08-02 23:59:00'
+        required: true
+      responses:
+        "201":
+          description: Exam was created
+        "400":
+          description: Data is incomplete
+        "503":
+          description: Database error
+  /exams/read.php:
+    get:
+      tags:
+        - Exams
+      summary: List all exams (Admin)
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/exams"
+        "404":
+          description: No exams found
+  /exams/update.php:
+    put:
+      tags:
+        - Exams
+      summary: Update an exam (Admin)
+      requestBody:
+        content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/exams"
+      responses:
+        "200":
+          description: Exam was updated
+        "503":
+          description: Unable to update exam
+  /exams/delete.php:
+    delete:
+      tags:
+        - Exams
+      summary: Delete an exam (Admin)
+      description: Exam object needed for delete operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: integer
+                  format: int64
+              example:
+                id: 10
+        required: true
+      responses:
+        "200":
+          description: Exam was deleted.
+        "404":
+          description: Missing required data.
+        "503":
+          description: Unable to delete exam.
+  /students2exams/create.php:
+    post:
+      tags:
+        - Students2Exams
+      summary: Add existing student to existing exam (Admin)
+      description: Object needed for mapping query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: 
+                - studentsid
+                - examsid
+              properties: 
+                studentsid:
+                  type: number
+                  format: int64
+                examsid:
+                  type: number
+                  format: int64
+              example:
+                studentsid: 1
+                examsid: 1
+        required: true
+      responses:
+        "201":
+          description: Student added to exam
+        "404":
+          description: No exams found for given student.
+        "503":
+          description: Create failed. Student and Exam must already exist. Could be duplicate data.
+  /students2exams/read.php:
+    get:
+      tags:
+        - Students2Exams
+      summary: List all students to exams with taken status and score (Admin)
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/students2exams"
+        "404":
+          description: No students to exams mappings found
+  /students2exams/readByStudentID.php:
+    post:
+      tags:
+        - Students2Exams
+      summary: Get all exams for given student ID with taken status and score (Admin)
+      description: Object needed for mapping query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: 
+                - studentsid
+              properties: 
+                studentsid:
+                  type: number
+                  format: int64
+              example:
+                studentsid: 1
+        required: true
+      responses:
+        "200":
+          description: Exam list is displayed if any.
+        "404":
+          description: No exams found for given student ID.
+  /students2exams/readByExamID.php:
+    post:
+      tags:
+        - Students2Exams
+      summary: Get all students for given exam ID with taken status and score (Admin)
+      description: Object needed for mapping query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: 
+                - examsid
+              properties: 
+                studentsid:
+                  type: number
+                  format: int64
+              example:
+                examsid: 1
+        required: true
+      responses:
+        "200":
+          description: Student list is displayed if any.
+        "404":
+          description: No students found for given exam ID.
+  /students2exams/delete.php:
+    delete:
+      tags:
+        - Students2Exams
+      summary: Delete existing student from existing exam (Admin)
+      description: Object needed for mapping query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: 
+                - studentsid
+                - examsid
+              properties: 
+                studentsid:
+                  type: number
+                  format: int64
+                examsid:
+                  type: number
+                  format: int64
+              example:
+                studentsid: 1
+                examsid: 1
+        required: true
+      responses:
+        "200":
+          description: Student deleted from exam
+        "400":
+          description: Data is incomplete
+        "503":
+          description: Delete failed. Student was not assigned to exam.
+  /questions2exams/create.php:
+    post:
+      tags:
+        - Questions2Exams
+      summary: Add existing question to existing exam (Admin)
+      description: Object needed for mapping query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: 
+                - questionsid
+                - examsid
+              properties: 
+                questionsid:
+                  type: number
+                  format: int64
+                examsid:
+                  type: number
+                  format: int64
+              example:
+                questionsid: 1
+                examsid: 1
+        required: true
+      responses:
+        "201":
+          description: Question added to exam
+        "404":
+          description: Unable to add question to exam.
+  /questions2exams/read.php:
+    get:
+      tags:
+        - Questions2Exams
+      summary: List all questions to exams mappings (Admin)
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/questions2exams"
+        "404":
+          description: No questions to exams mappings found
+  /questions2exams/readByExamID.php:
+    post:
+      tags:
+        - Questions2Exams
+      summary: Get all questions for given exam ID (Mobile)
+      description: Object needed for mapping query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: 
+                - examsid
+              properties: 
+                examsid:
+                  type: number
+                  format: int64
+              example:
+                examsid: 1
+        required: true
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: No questions found for given exam.
+  /questions2exams/delete.php:
+    delete:
+      tags:
+        - Questions2Exams
+      summary: Delete existing question from existing exam (Admin)
+      description: Object needed for mapping query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: 
+                - questionsid
+                - examsid
+              properties: 
+                questionsid:
+                  type: number
+                  format: int64
+                examsid:
+                  type: number
+                  format: int64
+              example:
+                questionsid: 1
+                examsid: 1
+        required: true
+      responses:
+        "200":
+          description: Question deleted from exam
+        "400":
+          description: Data is incomplete
+        "503":
+          description: Delete failed. Question was not assigned to exam.
+  /examresults/create.php:
+    post:
+      tags:
+        - ExamResults
+      summary: Enter exam results for existing student/question/exam (Mobile)
+      description: Object needed for mapping query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: 
+                - questionsid
+                - examsid
+                - studentsid
+              properties: 
+                questionsid:
+                  type: number
+                  format: int64
+                examsid:
+                  type: number
+                  format: int64
+                studentsid:
+                  type: number
+                  format: int64
+                answered:
+                  type: string
+              example:
+                questionsid: 1
+                examsid: 1
+                studentsid: 1
+                answered: 'c'
+        required: true
+      responses:
+        "201":
+          description: Exam result entered
+        "404":
+          description: Unable to enter exam result.
+  /examresults/getscore.php:
+    post:
+      tags: 
+        - ExamResults
+      summary: Get exam score for a student/exam. (Mobile)
+      description: Object needed for login operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - examsid
+                - studentsid
+              properties:
+                examsid:
+                  type: number
+                  format: int64
+                studentsid:
+                  type: number
+                  format: int64
+            example:
+              examsid: 1
+              studentsid: 1
+        required: true
+      responses:
+        "200":
+          description: Score retrieved
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  score:
+                    type: number
+                    format: float
+        "404":
+          description: Unable to get score
+components:
+  schemas:
+    students:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        isAdmin:
+          type: boolean
+          default: false
+        challenge:
+          type: string
+        verified:
+          type: boolean
+          default: false
+    questions:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        question:
+          type: string
+        a:
+          type: string
+        b:
+          type: string
+        c:
+          type: string
+        d:
+          type: string
+        e:
+          type: string
+        answer:
+          type: string
+        numberchoices:
+          type: integer
+          format: int64
+    exams:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        opens:
+          type: string
+          format: date-time
+        closes:
+          type: string
+          format: date-time
+    questions2exams:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        examsid:
+          type: integer
+          format: int64
+        questionsid:
+          type: integer
+          format: int64
+    students2exams:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        examsid:
+          type: integer
+          format: int64
+        studentsid:
+          type: integer
+          format: int64
+        taken:
+          type: boolean
+        score:
+          type: number
+          format: float          
+    examresults:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        examsid:
+          type: integer
+          format: int64
+        studentsid:
+          type: integer
+          format: int64
+        questionsid:
+          type: integer
+          format: int64
+        answered:
+          type: string
+  

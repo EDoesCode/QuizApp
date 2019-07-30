@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Confirmation">
+
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="54dp"
+        android:text="Please verified code"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+    <EditText
+        android:id="@+id/codeCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="-196dp"
+        android:ems="10"
+        android:hint="Enter email code"
+        android:inputType="numberPassword" />
+
+    <Button
+        android:id="@+id/codeSubmit"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="150dp"
+        android:background="#03A9F4"
+        android:text="Submit"
+        android:textColor="#FFFFFF" />
+
+</RelativeLayout>

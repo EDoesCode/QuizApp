@@ -3,7 +3,10 @@ $(document).ready(function() {
     $(addDiv).hide();
     data = null;
     directory = "exams";
+    var upperCaseDirectory = directory.charAt(0).toUpperCase()+directory.substring(1);
+    $(pageTitle).html(upperCaseDirectory);
     readData();
+    jumpToCreate();
 })
 
 /* Loads the exam table into tableDiv

@@ -49,9 +49,16 @@ if( !empty($data->email) ) {
       // set response code - 200 OK
       http_response_code(200);
 
-      // tell the user
-      echo json_encode(array("message" => "Verification code sent to email address."));
+      // Package object since mobile doesnt do session variables
+      $obj = (object) [
+        'email' => $students->email,
+        'challenge' => $challenge,
+        'message' => 'Verification code sent to email address.'
+      ];
 
+      // tell the user
+      // echo json_encode(array("message" => "Verification code sent to email address."));
+      echo json_encode($obj);
     }
 } else {
  

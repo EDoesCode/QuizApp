@@ -1,0 +1,38 @@
+body {
+	background-image: url("../images/background.jpg");
+	background-size: auto auto;
+	background-position: center;
+	font-family: "Arial", "Sans-serif";
+}
+
+#mainBox {
+	width: 80%;
+	min-width: 1500px;
+	margin: auto;
+	vertical-align: center;
+	border-style: outset;
+	border-width: 5px;
+	border-color: #c5e5a7;
+	background-color: #d6fcba;
+	padding: 20px;
+}
+
+#mainBox h1 {
+	text-align: center;
+}
+
+#bodyTable {
+	width: 100%;
+	min-height: 500px;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+#bodyTable th, #bodyTable td {
+
+}
+
+/* Styling for text that displays server responses/errors */
+.errorField {
+	text-align: center;
+}

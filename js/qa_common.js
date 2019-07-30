@@ -147,6 +147,7 @@ function makeRow(type, keys, curObj)
                 button.html("Delete");
                 button.attr("onclick", "deleteData("+ curObj.id+ ")");
             }
+            button.attr("class", "btn btn-primary");
             td.append(button);
             row.append(td);
         }
@@ -214,9 +215,9 @@ function openCreateModify(id = -1)
         // Create form
         $(submitButton).attr("onclick", "submitData()");
         $(submitButton).attr("value", "Add "+directoryName);
-        $(submitButton).attr("class", "btn btn-primary");
         window.location.hash = "create";
     }
+    $(submitButton).attr("class", "btn btn-primary");
     $(cancelButton).attr("onclick", "cancelCreateModify()");
     $(cancelButton).attr("value", "Cancel");
     $(cancelButton).attr("class", "btn btn-primary");
