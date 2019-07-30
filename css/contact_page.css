@@ -1,0 +1,71 @@
+/* Formatting for the search box */
+#searchCell {
+	width: 300px;
+	height: 100px;
+	vertical-align: top;
+	text-align: center;
+	padding-bottom: 5px;
+}
+/* Formatting for the contact list cell */
+#listCell {
+	border-left: 2px dashed black;
+	padding-left: 5px;
+	vertical-align: top;
+}
+
+/* Formatting for add contact cell */
+#addCell {
+	border-top: 2px dashed black;
+	padding-top: 20px;
+	vertical-align: top;
+}
+#addCell h3 {
+	text-align: center;
+}
+#addTable th:nth-child(odd)
+{
+	text-align: right;
+}
+#addTable th:nth-child(even)
+{
+	text-align:left;
+}
+
+/* Contact table formatting */
+
+#contactTable {
+	width: 100%;
+	margin: 10px;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+#contactTable tr:nth-child(odd){
+	background-color: #effff0;
+}
+
+#contactTable tr:nth-child(even){
+	background-color: #d6ffd8;
+}
+
+#contactTable th {
+	text-align: center;
+	margin: 0;
+	font-style: bold;
+	border: 2px solid black;
+	background-color: #a3ffa8;
+}
+
+#contactTable .emptyCell {
+	background-color: #d6fcba;
+	border: 0px;
+	width: 180;
+}
+
+#contactTable td {
+	border: 1px solid black;
+}
+
+#contactTable input, #contactTable button {
+	width: 100%;
+}
