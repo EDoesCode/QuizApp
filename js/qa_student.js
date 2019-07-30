@@ -3,7 +3,10 @@ $(document).ready(function() {
     $(addDiv).hide();
     data = null;
     directory = "students";
+    var upperCaseDirectory = directory.charAt(0).toUpperCase()+directory.substring(1);
+    $(pageTitle).html(upperCaseDirectory);
     readData();
+    jumpToCreate();
 })
 /* Loads the student table into tableDiv
 students: object[]: Array of Student objects
@@ -36,6 +39,7 @@ function populateFields(curData)
     $(password).val(curData.password);
     $(confirmPassword).val(curData.password);
     var checkAdmin = (curData.isAdmin == "1");
+    console.log(checkAdmin);
     $(isAdmin).prop("checked", checkAdmin);
 }
 
